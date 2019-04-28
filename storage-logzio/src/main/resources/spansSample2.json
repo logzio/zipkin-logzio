@@ -1,0 +1,127 @@
+[{
+  "traceId": "94cc1cf79b07898a",
+  "duration": 3259,
+  "remoteEndpoint": {
+    "ipv4": "127.0.0.1",
+    "port": 58156
+  },
+  "localEndpoint": {
+    "serviceName": "backend",
+    "ipv4": "10.174.42.206"
+  },
+  "timestamp_millis": 1554729353000,
+  "kind": "SERVER",
+  "name": "get /api",
+  "id": "81b292af31776efc",
+  "parentId": "94cc1cf79b07898a",
+  "timestamp": 1554729353000000,
+  "tags": {
+    "http.method": "ET",
+    "http.path": "/api",
+    "mvc.controller.class": "Backend",
+    "mvc.controller.method": "printDate"
+  }
+}
+, {
+  "traceId": "895adcd24987f45a",
+  "duration": 1440,
+  "remoteEndpoint": {
+    "ipv6": "::1",
+    "port": 63169
+  },
+  "localEndpoint": {
+    "serviceName": "backend",
+    "ipv4": "10.174.42.206"
+  },
+  "timestamp_millis": 1554729353000,
+  "kind": "SERVER",
+  "name": "get /api",
+  "id": "895adcd24987f45a",
+  "timestamp": 1554729353000000,
+  "tags": {
+    "http.method": "GET",
+    "http.path": "/api",
+    "mvc.controller.class": "Backend",
+    "mvc.controller.method": "printDate"
+  }
+}, {
+  "traceId": "6b9ab423016dd931",
+  "duration": 24942,
+  "remoteEndpoint": {
+    "ipv6": "::1",
+    "port": 58154
+  },
+  "localEndpoint": {
+    "serviceName": "frontend",
+    "ipv4": "10.174.42.206"
+  },
+  "timestamp_millis": 1554729353000,
+  "kind": "SERVER",
+  "name": "get /",
+  "id": "6b9ab423016dd931",
+  "timestamp": 1554729353000000,
+  "tags": {
+    "http.method": "GET",
+    "http.path": "/",
+    "mvc.controller.class": "Frontend",
+    "mvc.controller.method": "callBackend"
+  }
+}, {
+  "traceId": "6b9ab423016dd931",
+  "duration": 8258,
+  "remoteEndpoint": {
+    "ipv4": "127.0.0.1",
+    "port": 58156
+  },
+
+  "localEndpoint": {
+    "serviceName": "backend",
+    "ipv4": "10.174.42.206"
+  },
+  "timestamp_millis": 1554729353000,
+  "kind": "SERVER",
+  "name": "get /api",
+  "id": "0a2bb38ffe33601e",
+  "parentId": "6b9ab423016dd931",
+  "timestamp": 1554729353000000,
+  "tags": {
+    "http.method": "GET",
+    "http.path": "/api",
+    "mvc.controller.class": "Backend",
+    "mvc.controller.method": "printDate"
+  }
+}, {
+  "traceId": "78b6cf801a30b69f",
+  "duration": 155892,
+  "localEndpoint": {
+    "serviceName": "frontend",
+    "ipv4": "10.174.42.206"
+  },
+  "timestamp_millis": 1554729353000,
+  "kind": "CLIENT",
+  "name": "get",
+  "id": "d78feed6930ab051",
+  "parentId": "78b6cf801a30b69f",
+  "timestamp": 1554729353000000,
+  "tags": {
+    "http.method": "GET",
+    "http.path": "/api"
+  }
+}, {
+  "traceId": "a57b226d2fd3d648",
+  "duration": 4811,
+  "localEndpoint": {
+    "serviceName": "frontend",
+    "ipv4": "10.174.42.206"
+  },
+  "timestamp_millis": 1554729353000,
+  "kind": "CLIENT",
+  "name": "get",
+  "id": "9d1ad3ede01c5c84",
+  "parentId": "a57b226d2fd3d648",
+  "timestamp": 1554729353000000,
+  "tags": {
+    "http.method": "GET",
+    "http.path": "/api"
+  }
+}]

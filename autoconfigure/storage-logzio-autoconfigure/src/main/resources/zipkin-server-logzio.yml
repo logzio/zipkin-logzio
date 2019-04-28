@@ -1,0 +1,12 @@
+# When enabled, this allows shorter env properties (ex -Dspring.profiles.active=logzio)
+zipkin:
+  storage:
+    strict-trace-id: ${STRICT_TRACE_ID:true}
+    logzio:
+      # Scouter collector address
+      logzio-listener-address: ${LOGZIO_LISTENER_ADDR:https://listener.logz.io:8071}
+      logzio-api-token: ${API_TOKEN:}
+      logzio-token: ${LOGZIO_TOKEN:}
+
+
+
