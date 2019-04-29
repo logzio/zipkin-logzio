@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.zipkin.logzio</groupId>
+        <groupId>io.logz.zipkin</groupId>
         <artifactId>zipkin-autoconfigure</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
@@ -13,9 +13,9 @@
     <dependencies>
 
         <dependency>
-            <groupId>io.zipkin.logzio</groupId>
+            <groupId>io.logz.zipkin</groupId>
             <artifactId>zipkin-storage-logzio</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>0.0.1</version>
         </dependency>
 
     </dependencies>

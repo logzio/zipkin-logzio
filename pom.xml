@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.zipkin.logzio</groupId>
+    <groupId>io.logz.zipkin</groupId>
     <artifactId>zipkin-logzio-parent</artifactId>
     <version>0.0.1</version>
     <packaging>pom</packaging>
