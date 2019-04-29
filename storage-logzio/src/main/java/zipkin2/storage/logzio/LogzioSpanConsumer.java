@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class LogzioSpanConsumer implements SpanConsumer {
 
@@ -69,6 +70,9 @@ public class LogzioSpanConsumer implements SpanConsumer {
 
             for (Span span : spans) {
                 long spanTimestamp = span.timestampAsLong();
+                if (spanTimestamp != 0L) {
+                    spanTimestamp = TimeUnit.MICROSECONDS.toMillis(spanTimestamp);
+                }
                 byte[] spanBytes = getSpanBytes(span, spanTimestamp);
                 bos.write(spanBytes);
                 bos.write("\n".getBytes(StandardCharsets.UTF_8));
