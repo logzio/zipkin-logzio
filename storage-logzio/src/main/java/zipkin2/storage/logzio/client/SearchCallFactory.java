@@ -24,7 +24,7 @@ import zipkin2.internal.Nullable;
 
 public class SearchCallFactory {
     private static final MediaType APPLICATION_JSON = MediaType.parse("application/json");
-    private static final String API_TOKEN_HEADER = "X-API-TOKEN";
+    public static final String API_TOKEN_HEADER = "X-API-TOKEN";
 
     private final HttpCall.Factory http;
     private final String apiToken;
@@ -37,6 +37,7 @@ public class SearchCallFactory {
     }
 
     public <V> HttpCall<V> newCall(SearchRequest request, HttpCall.BodyConverter<V> bodyConverter) {
+        System.out.println(searchRequest.toJson(request));
         Request httpRequest = new Request.Builder().url(lenientSearch(request.type))
                 .post(RequestBody.create(APPLICATION_JSON, searchRequest.toJson(request)))
                 .header("Content-Type", "application/json")
