@@ -130,7 +130,7 @@ public class LogzioSpanConsumer implements SpanConsumer {
         return newSpanBytes;
     }
 
-    class LogzioCall extends Call.Base<Void> {
+    public class LogzioCall extends Call.Base<Void> {
         byte[] message;
 
         public LogzioCall(byte[] message) {
