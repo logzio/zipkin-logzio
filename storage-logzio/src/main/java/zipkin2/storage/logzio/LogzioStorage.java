@@ -29,7 +29,7 @@ public final class LogzioStorage extends StorageComponent {
     private final LogzioSpanConsumer spanConsumer;
     private final LogzioSpanStore spanStore;
     private boolean strictTraceId;
-    private static final List<String> LOGZIO_HOST_AS_LIST = java.util.Arrays.asList("https://api.logz.io/v1/search");
+    private List<String> LOGZIO_HOST_AS_LIST = java.util.Arrays.asList("https://api.logz.io/v1/search");
 
 
     public static Builder newBuilder() {
@@ -46,6 +46,9 @@ public final class LogzioStorage extends StorageComponent {
             this.spanConsumer = null;
         }
         if (!config.getApiToken().isEmpty()) {
+            if (config.getSearchURL() != null) {
+                LOGZIO_HOST_AS_LIST = java.util.Arrays.asList(config.getSearchURL());
+            }
             this.spanStore = new LogzioSpanStore(this, config.getApiToken());
         } else {
             logger.warn("API token was not supplied, couldn't generate span store (traces will be stored but not shown)");
@@ -99,6 +102,7 @@ public final class LogzioStorage extends StorageComponent {
         ConsumerParams consumerParams;
         String apiToken = "";
         boolean strictTraceId = true;
+        private String searchURL;
 
         @Override
         public Builder strictTraceId(boolean strictTraceId) {
@@ -130,6 +134,7 @@ public final class LogzioStorage extends StorageComponent {
             if (storageParams == null) throw new IllegalArgumentException("consumerParams == null");
             this.consumerParams = storageParams.getConsumerParams();
             this.apiToken = storageParams.getApiToken();
+            this.searchURL = storageParams.getSearchURL();
             return this;
         }
 
@@ -140,6 +145,7 @@ public final class LogzioStorage extends StorageComponent {
             }
             LogzioStorageParams storageParams = new LogzioStorageParams();
             storageParams.setApiToken(apiToken);
+            storageParams.setSearchURL(searchURL);
             storageParams.setConsumerParams(consumerParams);
             storageParams.setStrictTraceId(strictTraceId);
             return new LogzioStorage(storageParams);

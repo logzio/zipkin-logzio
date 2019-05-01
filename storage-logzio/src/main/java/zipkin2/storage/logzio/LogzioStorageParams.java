@@ -6,6 +6,7 @@ public class LogzioStorageParams {
 
     private ConsumerParams consumerParams;
     private boolean strictTraceId;
+    private String searchURL;
 
     public LogzioStorageParams() {
         consumerParams = new ConsumerParams();
@@ -41,5 +42,13 @@ public class LogzioStorageParams {
 
     public boolean isStrictTraceId() {
         return strictTraceId;
+    }
+
+    public void setSearchURL(String url) {
+        this.searchURL = url;
+    }
+
+    public String getSearchURL() {
+        return searchURL;
     }
 }
