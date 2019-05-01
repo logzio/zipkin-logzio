@@ -35,25 +35,6 @@ public class LogzioSpanConsumerTest {
    private HttpRequest[] recordedRequests;
    private ClientAndServer mockServer;
 
-   private List<Span> getSampleSpans() {
-      List<Span> resultSpans = new ArrayList<Span>();
-      JSONParser parser = new JSONParser();
-      try {
-         String spanSampleFile = LogzioSpanConsumerTest.class.getClassLoader().getResource("spansSample3.json").getFile();
-         JSONArray spansJson = (JSONArray) parser.parse(new FileReader(spanSampleFile));
-         for (Object span : spansJson) {
-            resultSpans.add(SpanBytesDecoder.JSON_V2.decodeOne(span.toString().getBytes()));
-         }
-      } catch (ParseException e) {
-         logger.error("can't parse file to json error: {}", e.getMessage());
-      } catch (FileNotFoundException e) {
-         logger.error("file not found: {}", e.getMessage());
-      } catch (IOException e) {
-         logger.error("error: {}", e.getMessage());
-      }
-      return resultSpans;
-   }
-
    @Before
    public void startMockServer() {
       logger.debug("starting mock server");

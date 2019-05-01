@@ -1,7 +1,12 @@
 import io.logz.sender.com.google.gson.Gson;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import zipkin2.Call;
 import zipkin2.Span;
 import zipkin2.elasticsearch.internal.client.HttpCall;
@@ -17,33 +22,39 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LogzioSpanStoreTest {
-    List<String> hosts = java.util.Arrays.asList("https://api.logz.io/v1/search");
-//    List<String> hosts = java.util.Arrays.asList("http://localhost:9200");
-    String apiToken = "not-a-real-api-token";
-    LogzioStorageParams params = new LogzioStorageParams();
-    LogzioStorage storage ;
-    LogzioSpanStore spanStore ;
 
+public class LogzioSpanStoreTest {
+    public MockWebServer es = new MockWebServer();
+
+    private static final Logger logger = LoggerFactory.getLogger(LogzioSpanStoreTest.class);
+
+    private String apiToken = "not-a-real-api-token";
+    private LogzioStorageParams params = new LogzioStorageParams();
+    private LogzioStorage storage ;
+    private LogzioSpanStore spanStore ;
 
     @Before
     public void setup() {
-        params.setApiToken(apiToken);
-        storage = LogzioStorage.newBuilder().config(params).build();
-        spanStore = new LogzioSpanStore(storage,apiToken);
-    }
-
-    @Test
-    public void getTraceByIdTest() {
         try {
-            Call<List<Span>> request = spanStore.getTrace("a190c8577f1b59fa");
-            List<Span> result = request.execute();
-
-            System.out.println(result.toString());
+            es.start(8123);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        params.setApiToken(apiToken);
+        params.setSearchURL("http://localhost:8123");
+        storage = LogzioStorage.newBuilder().config(params).build();
+        spanStore = new LogzioSpanStore(storage,apiToken);
 
+    }
+
+    @Test
+    public void doesntTruncateTraceIdByDefault() throws Exception {
+        es.enqueue(new MockResponse());
+
+        spanStore.getTrace("48fec942f3e78b893041d36dc43227fd").execute();
+        RecordedRequest request = es.takeRequest();
+        String body = request.getBody().readUtf8();
+        Assert.assertTrue(body.contains("\"traceId\":\"48fec942f3e78b893041d36dc43227fd\""));
     }
 
     @Test
