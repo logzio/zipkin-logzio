@@ -5,7 +5,7 @@ public class LogzioStorageParams {
     private String apiToken = "";
 
     private ConsumerParams consumerParams;
-    private boolean strictTraceId;
+    private boolean strictTraceId = true;
     private String searchURL;
 
     public LogzioStorageParams() {

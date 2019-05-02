@@ -32,7 +32,6 @@ public class LogzioSpanStore implements SpanStore {
         this.strictTraceId = storage.isStrictTraceId();
         this.groupByTraceId = GroupByTraceId.create(strictTraceId);
         this.namesLookback = 7776000000L; //90 days
-        logger.info("StrictTraceId=" + strictTraceId);
     }
 
     @Override

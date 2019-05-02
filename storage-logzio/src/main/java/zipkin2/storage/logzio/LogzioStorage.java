@@ -94,8 +94,11 @@ public final class LogzioStorage extends StorageComponent {
     @Override
     public synchronized void close() {
         if (closeCalled) return;
-        spanConsumer.close();
+        if (spanConsumer != null) {
+            spanConsumer.close();
+        }
         closeCalled = true;
+        http().close();
     }
 
     public static final class Builder extends StorageComponent.Builder {
@@ -135,6 +138,7 @@ public final class LogzioStorage extends StorageComponent {
             this.consumerParams = storageParams.getConsumerParams();
             this.apiToken = storageParams.getApiToken();
             this.searchURL = storageParams.getSearchURL();
+            this.strictTraceId = storageParams.isStrictTraceId();
             return this;
         }
 

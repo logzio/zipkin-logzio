@@ -37,7 +37,6 @@ public class SearchCallFactory {
     }
 
     public <V> HttpCall<V> newCall(SearchRequest request, HttpCall.BodyConverter<V> bodyConverter) {
-        System.out.println(searchRequest.toJson(request));
         Request httpRequest = new Request.Builder().url(lenientSearch(request.type))
                 .post(RequestBody.create(APPLICATION_JSON, searchRequest.toJson(request)))
                 .header("Content-Type", "application/json")
