@@ -1,27 +1,21 @@
-import org.json.simple.JSONArray;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.mockserver.client.MockServerClient;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import zipkin2.Endpoint;
 import zipkin2.Span;
-import zipkin2.codec.SpanBytesDecoder;
 import zipkin2.storage.logzio.ConsumerParams;
 import zipkin2.storage.logzio.LogzioSpanConsumer;
 import zipkin2.storage.logzio.LogzioStorage;
 import zipkin2.storage.logzio.LogzioStorageParams;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 import static org.mockserver.model.HttpRequest.request;
