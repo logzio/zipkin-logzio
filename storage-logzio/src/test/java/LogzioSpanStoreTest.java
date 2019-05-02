@@ -39,7 +39,7 @@ public class LogzioSpanStoreTest {
             e.printStackTrace();
         }
         params.setApiToken(apiToken);
-        params.setSearchURL("http://localhost:8123");
+        params.setSearchApiUrl("http://localhost:8123");
     }
 
     @AfterClass

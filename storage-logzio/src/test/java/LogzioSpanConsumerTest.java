@@ -52,7 +52,7 @@ public class LogzioSpanConsumerTest {
       Span sampleSpan = Span.newBuilder().traceId(traceId).id("2").timestamp(1L).localEndpoint(LOCAL_ENDPOINT).kind(Span.Kind.CLIENT).build();
       ConsumerParams consumerParams = new ConsumerParams();
       consumerParams.setToken("notARealToken");
-      consumerParams.setUrl("http://127.0.0.1:8070");
+      consumerParams.setListenerUrl("http://127.0.0.1:8070");
       LogzioStorageParams storageParams = new LogzioStorageParams();
       storageParams.setConsumerParams(consumerParams);
 
@@ -64,12 +64,6 @@ public class LogzioSpanConsumerTest {
          Assert.fail(e.getMessage());
       }
 
-
-      try {
-         Thread.sleep(5000);
-      } catch (InterruptedException e) {
-         e.printStackTrace();
-      }
       recordedRequests = mockServerClient.retrieveRecordedRequests(request().withMethod("POST"));
       Assert.assertEquals(recordedRequests.length,1);
       String body = recordedRequests[0].getBodyAsString();

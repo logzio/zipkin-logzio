@@ -6,7 +6,7 @@ public class LogzioStorageParams {
 
     private ConsumerParams consumerParams;
     private boolean strictTraceId = true;
-    private String searchURL;
+    private String searchApiUrl;
 
     public LogzioStorageParams() {
         consumerParams = new ConsumerParams();
@@ -20,7 +20,9 @@ public class LogzioStorageParams {
     public String toString() {
         return "LogzioStorageConfig{" +
                 consumerParams.toString() +
-                " ApiToken=" + apiToken +
+                " ApiToken=" + apiToken + "," +
+                " StrictTracId=" + strictTraceId + "," +
+                " ApiURL=" + searchApiUrl + "," +
                 "}";
     }
 
@@ -44,11 +46,12 @@ public class LogzioStorageParams {
         return strictTraceId;
     }
 
-    public void setSearchURL(String url) {
-        this.searchURL = url;
+    public void setSearchApiUrl(String url) {
+        this.searchApiUrl = url;
     }
 
-    public String getSearchURL() {
-        return searchURL;
+    public String getSearchApiUrl() {
+        return searchApiUrl;
     }
+
 }

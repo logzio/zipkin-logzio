@@ -27,10 +27,14 @@ import ch.qos.logback.classic.Logger;
 class ZipkinLogzioStorageProperties implements Serializable { // for Spark jobs
     private static final long serialVersionUID = 0L;
     private static final Logger logger = (Logger) LoggerFactory.getLogger(ZipkinLogzioStorageProperties.class.getName());
+    private static final String HTTPS_PREFIX = "https://";
+    private static final String SEARCH_API_SUFFIX = "/v1/search";
+    private static final String LISTENER_JSON_PORT = ":8071";
 
     private String logzioToken;
-    private String logzioAPIToken;
+    private String logzioApiToken;
     private String logzioListenerAddress;
+    private String logzioApiUrl;
 
     public void setLogzioToken(String logzioToken) {
         this.logzioToken = logzioToken;
@@ -40,12 +44,12 @@ class ZipkinLogzioStorageProperties implements Serializable { // for Spark jobs
         return this.logzioToken;
     }
 
-    public void setLogzioAPIToken(String logzioAPIToken) {
-        this.logzioAPIToken = logzioAPIToken;
+    public void setLogzioApiToken(String logzioApiToken) {
+        this.logzioApiToken = logzioApiToken;
     }
 
-    public String getLogzioAPIToken() {
-        return this.logzioAPIToken;
+    public String getLogzioApiToken() {
+        return this.logzioApiToken;
     }
 
     public String getLogzioListenerAddress() {
@@ -56,13 +60,21 @@ class ZipkinLogzioStorageProperties implements Serializable { // for Spark jobs
         this.logzioListenerAddress = logzioListenerAddress;
     }
 
+    public String getLogzioApiUrl() {
+        return logzioApiUrl;
+    }
+
+    public void setLogzioApiUrl(String logzioApiUrl) {
+        this.logzioApiUrl = logzioApiUrl;
+    }
     public LogzioStorage.Builder toBuilder() {
         LogzioStorageParams config = new LogzioStorageParams();
         ConsumerParams consumerParams = new ConsumerParams();
-        consumerParams.setUrl(logzioListenerAddress);
+        consumerParams.setListenerUrl(HTTPS_PREFIX + logzioListenerAddress + LISTENER_JSON_PORT);
         consumerParams.setToken(logzioToken);
         config.setConsumerParams(consumerParams);
-        config.setApiToken(logzioAPIToken);
+        config.setApiToken(logzioApiToken);
+        config.setSearchApiUrl(HTTPS_PREFIX + logzioApiUrl + SEARCH_API_SUFFIX);
         logger.info("[zipkin-logzio-storage] config " + config.toString());
         LogzioStorage.Builder builder = LogzioStorage.newBuilder();
         builder.config(config);
@@ -70,3 +82,4 @@ class ZipkinLogzioStorageProperties implements Serializable { // for Spark jobs
     }
 
 }
+

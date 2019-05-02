@@ -38,7 +38,7 @@ public class ConsumerParams {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setListenerUrl(String url) {
         this.url = url;
     }
 
