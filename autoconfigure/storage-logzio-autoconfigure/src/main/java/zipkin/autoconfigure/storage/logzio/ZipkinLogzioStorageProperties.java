@@ -29,7 +29,7 @@ class ZipkinLogzioStorageProperties implements Serializable { // for Spark jobs
     private static final Logger logger = (Logger) LoggerFactory.getLogger(ZipkinLogzioStorageProperties.class.getName());
     private static final String HTTPS_PREFIX = "https://";
     private static final String SEARCH_API_SUFFIX = "/v1/search";
-    private static final String LISTENER_JSON_PORT = ":8071";
+    private static final String LISTENER_HTTPS_PORT = ":8071";
 
     private String logzioToken;
     private String logzioApiToken;
@@ -70,7 +70,7 @@ class ZipkinLogzioStorageProperties implements Serializable { // for Spark jobs
     public LogzioStorage.Builder toBuilder() {
         LogzioStorageParams config = new LogzioStorageParams();
         ConsumerParams consumerParams = new ConsumerParams();
-        consumerParams.setListenerUrl(HTTPS_PREFIX + logzioListenerAddress + LISTENER_JSON_PORT);
+        consumerParams.setListenerUrl(HTTPS_PREFIX + logzioListenerAddress + LISTENER_HTTPS_PORT);
         consumerParams.setToken(logzioToken);
         config.setConsumerParams(consumerParams);
         config.setApiToken(logzioApiToken);

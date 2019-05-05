@@ -96,8 +96,11 @@ public final class LogzioStorage extends StorageComponent {
         if (spanConsumer != null) {
             spanConsumer.close();
         }
+        if (spanStore != null) {
+            http().close();
+        }
         closeCalled = true;
-        http().close();
+
     }
 
     public static final class Builder extends StorageComponent.Builder {

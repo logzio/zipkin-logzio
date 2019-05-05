@@ -48,6 +48,7 @@ public class LogzioSpanConsumerTest {
 
    @Test
    public void testConsumerAccept() {
+      logger.info("Testing consumer accept..");
       String traceId = "1234567890abcdef";
       Span sampleSpan = Span.newBuilder().traceId(traceId).id("2").timestamp(1L).localEndpoint(LOCAL_ENDPOINT).kind(Span.Kind.CLIENT).build();
       ConsumerParams consumerParams = new ConsumerParams();
@@ -70,6 +71,30 @@ public class LogzioSpanConsumerTest {
       Assert.assertTrue(body.contains("\"" + "traceId" + "\":\"" + traceId + "\""));
       Assert.assertTrue(body.contains("\"" + "kind" + "\":\"" + Span.Kind.CLIENT + "\""));
       Assert.assertTrue(body.contains("\"" + "timestamp" + "\":" + 1));
+   }
+
+   @Test
+   public void closeStorageTest() {
+      logger.info("Testing storage close..");
+      String traceId = "1234567890abcdef";
+      Span sampleSpan = Span.newBuilder().traceId(traceId).id("2").timestamp(1L).localEndpoint(LOCAL_ENDPOINT).kind(Span.Kind.CLIENT).build();
+      ConsumerParams consumerParams = new ConsumerParams();
+      consumerParams.setToken("notARealToken");
+      consumerParams.setListenerUrl("http://127.0.0.1:8070");
+      LogzioStorageParams storageParams = new LogzioStorageParams();
+      storageParams.setConsumerParams(consumerParams);
+
+      LogzioStorage logzioStorage = LogzioStorage.newBuilder().config(storageParams).build();
+      LogzioSpanConsumer consumer = (LogzioSpanConsumer) logzioStorage.spanConsumer();
+      logzioStorage.close();
+      try {
+         consumer.accept(Arrays.asList(sampleSpan)).execute();
+      } catch (IOException e) {
+         Assert.fail(e.getMessage());
+      } catch (IllegalStateException ex) {
+         return;
+      }
+      Assert.fail("Send traces succeeded but storage was closed");
    }
 
 }

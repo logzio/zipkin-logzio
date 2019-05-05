@@ -24,7 +24,7 @@ public class LogzioSpanConsumer implements SpanConsumer {
 
     private static final int INDEX_CHARS_LIMIT = 256;
     private volatile LogzioSender logzioSender;
-    private boolean closeCalled;
+    private volatile boolean closeCalled;
     private final ByteString EMPTY_JSON = ByteString.of(new byte[]{'{', '}'});
     private static final Logger logger = LoggerFactory.getLogger(LogzioStorage.class);
 

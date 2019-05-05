@@ -138,7 +138,6 @@ public class LogzioSpanStoreTest {
         Assert.assertEquals(call.call.request().header(SearchCallFactory.API_TOKEN_HEADER),apiToken);
     }
 
-
 }
 
 
