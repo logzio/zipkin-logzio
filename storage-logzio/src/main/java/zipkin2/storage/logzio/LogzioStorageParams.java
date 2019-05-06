@@ -2,7 +2,7 @@ package zipkin2.storage.logzio;
 
 public class LogzioStorageParams {
 
-    private String apiToken = "";
+    private String apiToken;
 
     private ConsumerParams consumerParams;
     private boolean strictTraceId = true;
@@ -20,9 +20,9 @@ public class LogzioStorageParams {
     public String toString() {
         return "LogzioStorageConfig{" +
                 consumerParams.toString() +
-                " ApiToken=" + apiToken + "," +
+                " ApiToken=" + (apiToken.isEmpty() ? "" : "********" + apiToken.substring(apiToken.length()-4)) + "," +
                 " StrictTracId=" + strictTraceId + "," +
-                " ApiURL=" + searchApiUrl + "," +
+                " ApiURL=" + searchApiUrl +
                 "}";
     }
 

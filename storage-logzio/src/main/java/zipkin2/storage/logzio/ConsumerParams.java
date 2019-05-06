@@ -16,7 +16,7 @@ public class ConsumerParams {
 
     private String url;
     private final String type = "zipkinSpan";
-    private String token = "";
+    private String accountToken;
     private final int threadPoolSize = 3;
     private final boolean compressRequests = true;
     private final boolean fromDisk = true;
@@ -30,7 +30,7 @@ public class ConsumerParams {
     public ConsumerParams() {
         String queuePath = System.getProperty("user.dir");
         queuePath += queuePath.endsWith("/") ? "" : "/";
-        queuePath += "traces";
+        queuePath += "logzio-storage";
         this.queueDir = new File(queuePath);
     }
 
@@ -42,45 +42,12 @@ public class ConsumerParams {
         this.url = url;
     }
 
-    public String getType() {
-        return type;
+    public String getAccountToken() {
+        return accountToken;
     }
 
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public int getThreadPoolSize() {
-        return threadPoolSize;
-    }
-
-    public boolean isCompressRequests() {
-        return compressRequests;
-    }
-
-    public int getDiskSpaceCheckInterval() {
-        return diskSpaceCheckInterval;
-    }
-
-    public File getQueueDir() {
-        return queueDir;
-    }
-
-    public int getFileSystemFullPercentThreshold() {
-        return fileSystemFullPercentThreshold;
-    }
-
-    public int getGcPersistedQueueFilesIntervalSeconds() {
-        return gcPersistedQueueFilesIntervalSeconds;
-    }
-
-    public boolean isFromDisk() {
-        return fromDisk;
+    public void setAccountToken(String accountToken) {
+        this.accountToken = accountToken;
     }
 
     public LogzioSender getLogzioSender() {
@@ -89,31 +56,31 @@ public class ConsumerParams {
             requestConf = HttpsRequestConfiguration
                     .builder()
                     .setLogzioListenerUrl(getUrl())
-                    .setLogzioType(getType())
-                    .setLogzioToken(getToken())
-                    .setCompressRequests(isCompressRequests())
+                    .setLogzioType(this.type)
+                    .setLogzioToken(getAccountToken())
+                    .setCompressRequests(this.compressRequests)
                     .build();
         } catch (LogzioParameterErrorException e) {
-            logger.error("problem in one or more parameters with error {}", e.getMessage());
+            logger.error(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "problem in one or more parameters with error {}", e.getMessage());
             return null;
         }
         SenderStatusReporter statusReporter = StatusReporterFactory.newSenderStatusReporter(LoggerFactory.getLogger(LogzioSender.class));
         LogzioSender.Builder senderBuilder = LogzioSender
                 .builder()
-                .setTasksExecutor(Executors.newScheduledThreadPool(getThreadPoolSize()))
+                .setTasksExecutor(Executors.newScheduledThreadPool(this.threadPoolSize))
                 .setReporter(statusReporter)
                 .setHttpsRequestConfiguration(requestConf)
                 .setDebug(true)
                 .withDiskQueue()
-                .setQueueDir(getQueueDir())
-                .setCheckDiskSpaceInterval(getDiskSpaceCheckInterval())
-                .setFsPercentThreshold(getFileSystemFullPercentThreshold())
-                .setGcPersistedQueueFilesIntervalSeconds(getGcPersistedQueueFilesIntervalSeconds())
+                .setQueueDir(this.queueDir)
+                .setCheckDiskSpaceInterval(this.diskSpaceCheckInterval)
+                .setFsPercentThreshold(this.fileSystemFullPercentThreshold)
+                .setGcPersistedQueueFilesIntervalSeconds(this.gcPersistedQueueFilesIntervalSeconds)
                 .endDiskQueue();
         try {
             return senderBuilder.build();
         } catch (LogzioParameterErrorException e) {
-            logger.error("problem in one or more parameters with error {}", e.getMessage());
+            logger.error(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "problem in one or more parameters with error {}", e.getMessage());
         }
         return null;
     }
@@ -121,9 +88,8 @@ public class ConsumerParams {
     @Override
     public String toString() {
         return "SpanConsumerConfig{" +
-                "listenerUrl='" + url + '\'' +
-                ", token=" + token +
-                ", StorageMode='" + (fromDisk ? "fromDisk" : "InMemory") + '\'' +
+                "listener_url='" + url + '\'' +
+                "account_token=" + (accountToken.isEmpty() ? "" : "********" + accountToken.substring(accountToken.length()-4)) +
                 '}';
     }
 }

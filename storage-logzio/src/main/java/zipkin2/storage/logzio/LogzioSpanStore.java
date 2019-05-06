@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class LogzioSpanStore implements SpanStore {
+    private static final int MAX_AGGREGATION_SIZE = 1000;
     private final long namesLookback;
     private final boolean strictTraceId;
     private final SearchCallFactory search;
@@ -31,7 +32,7 @@ public class LogzioSpanStore implements SpanStore {
         this.search = new SearchCallFactory(storage.http(), apiToken);
         this.strictTraceId = storage.isStrictTraceId();
         this.groupByTraceId = GroupByTraceId.create(strictTraceId);
-        this.namesLookback = 7776000000L; //90 days
+        this.namesLookback = 1000*60*60*48L; //48 hours
     }
 
     @Override
@@ -104,8 +105,8 @@ public class LogzioSpanStore implements SpanStore {
         SearchRequest request =
                 SearchRequest.create()
                         .filters(filters)
-                        .addAggregation(Aggregation.terms(LogzioStorage.JSON_SERVICE_NAME_FIELD, 1000))
-                        .addAggregation(Aggregation.terms(LogzioStorage.JSON_REMOTE_SERVICE_NAME_FIELD, 1000));
+                        .addAggregation(Aggregation.terms(LogzioStorage.JSON_SERVICE_NAME_FIELD, MAX_AGGREGATION_SIZE))
+                        .addAggregation(Aggregation.terms(LogzioStorage.JSON_REMOTE_SERVICE_NAME_FIELD, MAX_AGGREGATION_SIZE));
         return search.newCall(request, BodyConverters.KEYS);
     }
 
@@ -125,14 +126,14 @@ public class LogzioSpanStore implements SpanStore {
         SearchRequest request =
                 SearchRequest.create()
                         .filters(filters)
-                        .addAggregation(Aggregation.terms(LogzioStorage.JSON_NAME_FIELD, 1000));
+                        .addAggregation(Aggregation.terms(LogzioStorage.JSON_NAME_FIELD, MAX_AGGREGATION_SIZE));
 
         return search.newCall(request, BodyConverters.KEYS);
     }
 
     @Override
     public Call<List<DependencyLink>> getDependencies(long endTs, long lookback) {
-        logger.error("Zipkin-logz.io doesn't support dependencies analysis");
+        logger.error(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "Zipkin-logz.io doesn't support dependencies analysis");
         return Call.emptyList();
     }
 

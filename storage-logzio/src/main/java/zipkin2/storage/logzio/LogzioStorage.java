@@ -24,12 +24,13 @@ public final class LogzioStorage extends StorageComponent {
     public static final String JSON_DURATION_FIELD = "duration";
     public static final String JSON_TRACE_ID_FIELD = "traceId";
     public static final String JSON_REMOTE_SERVICE_NAME_FIELD = "remoteEndpoint.serviceName";
+    public static final String ZIPKIN_LOGZIO_STORAGE_MSG = "[zipkin-logzio-storage] ";
     private volatile boolean closeCalled;
     private static final Logger logger = LoggerFactory.getLogger(LogzioStorage.class);
     private final LogzioSpanConsumer spanConsumer;
     private final LogzioSpanStore spanStore;
     private boolean strictTraceId;
-    private List<String> LOGZIO_HOST_AS_LIST;
+    private String logzioApiHost;
 
     public static Builder newBuilder() {
         return new Builder();
@@ -38,26 +39,26 @@ public final class LogzioStorage extends StorageComponent {
     private LogzioStorage(LogzioStorageParams config) {
         this.strictTraceId = config.isStrictTraceId();
 
-        if (!config.getConsumerParams().getToken().isEmpty()) {
+        if (!config.getConsumerParams().getAccountToken().isEmpty()) {
             this.spanConsumer = new LogzioSpanConsumer(config.getConsumerParams());
         } else {
-            logger.warn("logz.io token was not supplied, couldn't generate span consumer (traces will not be stored)");
+            logger.warn(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "logz.io account token was not supplied, couldn't generate span consumer (traces will not be stored)");
             this.spanConsumer = null;
         }
         if (!config.getApiToken().isEmpty()) {
             if (config.getSearchApiUrl() != null) {
-                LOGZIO_HOST_AS_LIST = java.util.Arrays.asList(config.getSearchApiUrl());
+                logzioApiHost = config.getSearchApiUrl();
             }
-            this.spanStore = new LogzioSpanStore(this, config.getApiToken());
+            this.spanStore = new  LogzioSpanStore(this, config.getApiToken());
         } else {
-            logger.warn("API token was not supplied, couldn't generate span store (traces will be stored but not shown)");
+            logger.warn(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "logz.io API token was not supplied, couldn't generate span store (traces will be stored but not shown)");
             this.spanStore = null;
         }
     }
 
     public SpanStore spanStore() {
         if (this.spanStore == null) {
-            throw new IllegalArgumentException("API token was not supplied, couldn't generate span store");
+            throw new IllegalArgumentException("logz.io API token was not supplied, couldn't generate span store");
         }
         return this.spanStore;
     }
@@ -70,20 +71,14 @@ public final class LogzioStorage extends StorageComponent {
         return strictTraceId;
     }
 
+    // hosts resolution might imply a network call, and we might make a new okhttp instance
     @Memoized
-    public // hosts resolution might imply a network call, and we might make a new okhttp instance
+    public
     HttpCall.Factory http() {
-        List<String> hosts = LOGZIO_HOST_AS_LIST;
-        OkHttpClient ok =
-                hosts.size() == 1
-                        ? client()
-                        : client()
-                        .newBuilder()
-                        .dns(PseudoAddressRecordSet.create(hosts, client().dns()))
-                        .build();
+        OkHttpClient ok = client();
         ok.dispatcher().setMaxRequests(MAX_HTTP_REQUESTS);
         ok.dispatcher().setMaxRequestsPerHost(MAX_HTTP_REQUESTS);
-        return new HttpCall.Factory(ok, HttpUrl.parse(hosts.get(0)));
+        return new HttpCall.Factory(ok, HttpUrl.parse(logzioApiHost));
     }
 
     private OkHttpClient client() {
@@ -104,14 +99,11 @@ public final class LogzioStorage extends StorageComponent {
     }
 
     public static final class Builder extends StorageComponent.Builder {
-        ConsumerParams consumerParams;
-        String apiToken = "";
-        boolean strictTraceId = true;
-        private String searchURL;
+        private LogzioStorageParams storageParams;
 
         @Override
         public Builder strictTraceId(boolean strictTraceId) {
-            this.strictTraceId = strictTraceId;
+            this.storageParams.setStrictTraceId(strictTraceId);
             return this;
         }
 
@@ -125,36 +117,17 @@ public final class LogzioStorage extends StorageComponent {
             return this;
         }
 
-        public Builder token(String token) {
-            consumerParams.setToken(token);
-            return this;
-        }
-
-        public Builder listenerURL(String url) {
-            consumerParams.setListenerUrl(url);
-            return this;
-        }
-
         public Builder config(LogzioStorageParams storageParams) {
-            if (storageParams == null) throw new IllegalArgumentException("consumerParams == null");
-            this.consumerParams = storageParams.getConsumerParams();
-            this.apiToken = storageParams.getApiToken();
-            this.searchURL = storageParams.getSearchApiUrl();
-            this.strictTraceId = storageParams.isStrictTraceId();
+            this.storageParams = storageParams;
             return this;
         }
 
         @Override
         public LogzioStorage build() {
-            if (consumerParams.getToken().isEmpty() && apiToken.isEmpty()) {
-                throw new IllegalArgumentException("At least one of logz.io token or api-token has to be valid");
+            if (this.storageParams.getConsumerParams().getAccountToken().isEmpty() && this.storageParams.getApiToken().isEmpty()) {
+                throw new IllegalArgumentException("At least one of logz.io account token or api-token has to be valid");
             }
-            LogzioStorageParams storageParams = new LogzioStorageParams();
-            storageParams.setApiToken(apiToken);
-            storageParams.setSearchApiUrl(searchURL);
-            storageParams.setConsumerParams(consumerParams);
-            storageParams.setStrictTraceId(strictTraceId);
-            return new LogzioStorage(storageParams);
+            return new LogzioStorage(this.storageParams);
         }
 
         Builder() {

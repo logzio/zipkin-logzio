@@ -9,29 +9,29 @@ public class StatusReporterFactory {
         return new SenderStatusReporter() {
 
             public void error(String s) {
-                logger.error(s);
+                logger.error(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + s);
             }
 
             public void error(String s, Throwable throwable) {
-                logger.error(s + " " + throwable.getMessage());
+                logger.error(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + s + " " + throwable.getMessage());
             }
 
             public void warning(String s) {
-                logger.warn(s);
+                logger.warn(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + s);
             }
 
             public void warning(String s, Throwable throwable) {
-                logger.warn(s + " " + throwable.getMessage());
+                logger.warn(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + s + " " + throwable.getMessage());
             }
 
             @Override
             public void info(String s) {
-                    logger.debug(s);
+                    logger.debug(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + s);
             }
 
             @Override
             public void info(String s, Throwable throwable) {
-                    logger.debug(s + " " + throwable.getMessage());
+                    logger.debug(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + s + " " + throwable.getMessage());
             }
         };
     }

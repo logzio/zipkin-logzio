@@ -23,13 +23,13 @@ import java.util.concurrent.TimeUnit;
 public class LogzioSpanConsumer implements SpanConsumer {
 
     private static final int INDEX_CHARS_LIMIT = 256;
+    private final ByteString EMPTY_JSON = ByteString.of(new byte[]{'{', '}'});
     private volatile LogzioSender logzioSender;
     private volatile boolean closeCalled;
-    private final ByteString EMPTY_JSON = ByteString.of(new byte[]{'{', '}'});
     private static final Logger logger = LoggerFactory.getLogger(LogzioStorage.class);
 
     public LogzioSpanConsumer(ConsumerParams params) {
-        if (logzioSender == null && !params.getToken().isEmpty()) {
+        if (logzioSender == null && !params.getAccountToken().isEmpty()) {
             synchronized (this) {
                 if (logzioSender == null) {
                     logzioSender = params.getLogzioSender();
@@ -41,14 +41,14 @@ public class LogzioSpanConsumer implements SpanConsumer {
 
     public Call<Void> accept(List<Span> spans) {
         if (closeCalled) throw new IllegalStateException("closed");
-        if (spans.size() == 0) {
+        if (spans.isEmpty()) {
             return Call.create(null);
         }
         byte[] message = new byte[0];
         try {
             message = spansToJsonBytes(spans);
         } catch (IOException e) {
-            logger.error("error converting spans to byte array: {}", e.getMessage());
+            logger.error(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "failed converting spans to byte array: {}", e.getMessage());
         }
         return new LogzioCall(message);
     }
@@ -110,7 +110,7 @@ public class LogzioSpanConsumer implements SpanConsumer {
             writer.endObject();
         } catch (IOException e) {
             // very unexpected to have an IOE for an in-memory write
-            logger.error("Error indexing query for span: " + span);
+            logger.error(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "failed to add timestamp or tags to span: " + span + ":" + e.getMessage());
 
             return SpanBytesEncoder.JSON_V2.encode(span);
         }
