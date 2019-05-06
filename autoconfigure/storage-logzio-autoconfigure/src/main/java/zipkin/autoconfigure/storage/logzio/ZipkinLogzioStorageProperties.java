@@ -1,16 +1,3 @@
-/*
- * Copyright 2016-2018 The OpenZipkin Authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
- */
 package zipkin.autoconfigure.storage.logzio;
 
 import org.slf4j.LoggerFactory;
@@ -31,17 +18,17 @@ class ZipkinLogzioStorageProperties implements Serializable { // for Spark jobs
     private static final String SEARCH_API_SUFFIX = "/v1/search";
     private static final String LISTENER_HTTPS_PORT = ":8071";
 
-    private String logzioToken;
+    private String logzioAccountToken;
     private String logzioApiToken;
-    private String logzioListenerAddress;
-    private String logzioApiUrl;
+    private String logzioListenerHost;
+    private String logzioApiHost;
 
-    public void setLogzioToken(String logzioToken) {
-        this.logzioToken = logzioToken;
+    public void setLogzioAccountToken(String logzioAccountToken) {
+        this.logzioAccountToken = logzioAccountToken;
     }
 
-    public String getLogzioToken() {
-        return this.logzioToken;
+    public String getLogzioAccountToken() {
+        return this.logzioAccountToken;
     }
 
     public void setLogzioApiToken(String logzioApiToken) {
@@ -52,33 +39,31 @@ class ZipkinLogzioStorageProperties implements Serializable { // for Spark jobs
         return this.logzioApiToken;
     }
 
-    public String getLogzioListenerAddress() {
-        return logzioListenerAddress;
+    public String getLogzioListenerHost() {
+        return logzioListenerHost;
     }
 
-    public void setLogzioListenerAddress(String logzioListenerAddress) {
-        this.logzioListenerAddress = logzioListenerAddress;
+    public void setLogzioListenerHost(String logzioListenerHost) {
+        this.logzioListenerHost = logzioListenerHost;
     }
 
-    public String getLogzioApiUrl() {
-        return logzioApiUrl;
+    public String getLogzioApiHost() {
+        return logzioApiHost;
     }
 
-    public void setLogzioApiUrl(String logzioApiUrl) {
-        this.logzioApiUrl = logzioApiUrl;
+    public void setLogzioApiHost(String logzioApiHost) {
+        this.logzioApiHost = logzioApiHost;
     }
     public LogzioStorage.Builder toBuilder() {
         LogzioStorageParams config = new LogzioStorageParams();
         ConsumerParams consumerParams = new ConsumerParams();
-        consumerParams.setListenerUrl(HTTPS_PREFIX + logzioListenerAddress + LISTENER_HTTPS_PORT);
-        consumerParams.setToken(logzioToken);
+        consumerParams.setListenerUrl(HTTPS_PREFIX + logzioListenerHost + LISTENER_HTTPS_PORT);
+        consumerParams.setAccountToken(logzioAccountToken);
         config.setConsumerParams(consumerParams);
         config.setApiToken(logzioApiToken);
-        config.setSearchApiUrl(HTTPS_PREFIX + logzioApiUrl + SEARCH_API_SUFFIX);
-        logger.info("[zipkin-logzio-storage] config " + config.toString());
-        LogzioStorage.Builder builder = LogzioStorage.newBuilder();
-        builder.config(config);
-        return builder;
+        config.setSearchApiUrl(HTTPS_PREFIX + logzioApiHost + SEARCH_API_SUFFIX);
+        logger.info(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "config " + config.toString());
+        return LogzioStorage.newBuilder().config(config);
     }
 
 }

@@ -3,10 +3,10 @@ zipkin:
   storage:
     strict-trace-id: ${STRICT_TRACE_ID:true}
     logzio:
-      logzio-listener-address: ${LOGZIO_LISTENER_ADDR:listener.logz.io}
-      logzio-api-token: ${API_TOKEN:}
-      logzio-api-url: ${API_URL:api.logz.io}
-      logzio-token: ${LOGZIO_TOKEN:}
+      logzio-listener-host: ${LOGZIO_LISTENER_HOST:listener.logz.io}
+      logzio-api-token: ${LOGZIO_API_TOKEN:}
+      logzio-api-host: ${LOGZIO_API_HOST:api.logz.io}
+      logzio-account-token: ${LOGZIO_ACCOUNT_TOKEN:}
 
 
 
