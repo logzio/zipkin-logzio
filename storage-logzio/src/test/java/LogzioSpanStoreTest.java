@@ -74,61 +74,6 @@ public class LogzioSpanStoreTest {
         Assert.assertTrue(mockWebServer.takeRequest().getBody().readUtf8().contains("\"traceId\":\"3041d36dc43227fd\""));
     }
 
-//    @Test
-//    public void getServiceNamesTest() {
-//        Call<List<String>> reqeust = spanStore.getServiceNames();
-//        try {
-//            List<String> serviceNames = reqeust.execute();
-//            for (String name : serviceNames) {
-//                System.out.println(name);
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-//
-//    @Test
-//    public void getSpanNamesTest() {
-//        Call<List<String>> reqeust = spanStore.getSpanNames("frontend");
-//        try {
-//            List<String> serviceNames = reqeust.execute();
-//            for (String name : serviceNames) {
-//                System.out.println(name);
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//
-//    @Test
-//    public void test() {
-//        List<String> sd = new ArrayList<>();
-//        sd.add("sadgads");
-//        sd.add("sadgaasdgadsfg");
-//        Gson builder = new Gson();
-//        System.out.println(builder.toJson(sd));
-//    }
-//
-//    @Test
-//    public void getTracesByRequestTest() {
-//      QueryRequest request = QueryRequest.newBuilder().endTs(1556461811000L).lookback(12*60*60*1000L).limit(1000).build();
-//        try {
-//            int traceCount = 0;
-//            List<List<Span>> response = spanStore.getTraces(request).execute();
-//            for (List<Span> list : response) {
-////                for (Span span : list) {
-////                    System.out.println(span.toString());
-////                }
-//            traceCount += list.size();
-//            }
-//            System.out.println(traceCount);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     @Test
     public void newHttpCallHeaderTest() {
         logger.info(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "Testing api token in search call header");
