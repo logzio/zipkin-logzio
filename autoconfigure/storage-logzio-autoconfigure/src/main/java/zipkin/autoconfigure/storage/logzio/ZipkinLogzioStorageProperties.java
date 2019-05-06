@@ -1,14 +1,13 @@
 package zipkin.autoconfigure.storage.logzio;
 
+import ch.qos.logback.classic.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import zipkin2.storage.logzio.ConsumerParams;
-import zipkin2.storage.logzio.LogzioStorageParams;
 import zipkin2.storage.logzio.LogzioStorage;
+import zipkin2.storage.logzio.LogzioStorageParams;
 
 import java.io.Serializable;
-
-import ch.qos.logback.classic.Logger;
 
 @ConfigurationProperties("zipkin.storage.logzio")
 class ZipkinLogzioStorageProperties implements Serializable { // for Spark jobs

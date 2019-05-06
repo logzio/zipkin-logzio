@@ -10,8 +10,6 @@ import zipkin2.storage.SpanConsumer;
 import zipkin2.storage.SpanStore;
 import zipkin2.storage.StorageComponent;
 
-import java.util.List;
-
 public final class LogzioStorage extends StorageComponent {
 
 
