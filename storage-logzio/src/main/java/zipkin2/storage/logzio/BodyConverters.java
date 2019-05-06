@@ -41,5 +41,4 @@ public final class BodyConverters {
             };
     public static final HttpCall.BodyConverter<List<Span>> SPANS =
             SearchResultConverter.create(JsonAdapters.SPAN_ADAPTER);
-    //todo: check normal behavior of dependencies (dependecy link has been deleted here)
 }
