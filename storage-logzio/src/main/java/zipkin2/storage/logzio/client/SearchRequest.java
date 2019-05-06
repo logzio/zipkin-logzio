@@ -1,6 +1,7 @@
 package zipkin2.storage.logzio.client;
 
 import zipkin2.internal.Nullable;
+import zipkin2.storage.logzio.ConsumerParams;
 
 import java.util.*;
 
@@ -53,6 +54,7 @@ public final class SearchRequest {
   }
 
   public SearchRequest filters(Filters filters) {
+     filters.addTerm("type", ConsumerParams.type);
     return query(new BoolQuery("must", filters));
   }
 

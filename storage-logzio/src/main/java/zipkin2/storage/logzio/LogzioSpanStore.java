@@ -89,7 +89,8 @@ public class LogzioSpanStore implements SpanStore {
     public Call<List<Span>> getTrace(String traceId) {
         traceId = Span.normalizeTraceId(traceId);
         if (!strictTraceId && traceId.length() == 32) traceId = traceId.substring(16);
-        SearchRequest request = SearchRequest.create().term(LogzioStorage.JSON_TRACE_ID_FIELD, traceId);
+        SearchRequest.Filters filter = new SearchRequest.Filters().addTerm(LogzioStorage.JSON_TRACE_ID_FIELD, traceId);
+        SearchRequest request = SearchRequest.create().filters(filter);
         return search.newCall(request, BodyConverters.SPANS);
     }
 

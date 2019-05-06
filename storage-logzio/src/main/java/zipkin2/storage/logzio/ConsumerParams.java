@@ -15,11 +15,10 @@ public class ConsumerParams {
     private static final Logger logger = LoggerFactory.getLogger(ConsumerParams.class);
 
     private String url;
-    private final String type = "zipkinSpan";
+    public static final String type = "zipkinSpan";
     private String accountToken;
     private final int threadPoolSize = 3;
     private final boolean compressRequests = true;
-    private final boolean fromDisk = true;
 
     // Disk queue parameters
     private File queueDir;
