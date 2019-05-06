@@ -32,7 +32,7 @@ public class LogzioSpanStoreTest {
 
     @BeforeClass
     public static void setup() {
-        logger.info("Setting up test environment");
+        logger.info(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "Setting up test environment");
         try {
             mockWebServer.start(8123);
         } catch (IOException e) {
@@ -40,6 +40,7 @@ public class LogzioSpanStoreTest {
         }
         params.setApiToken(apiToken);
         params.setSearchApiUrl("http://localhost:8123");
+        params.getConsumerParams().setAccountToken("");
     }
 
     @AfterClass
@@ -50,7 +51,7 @@ public class LogzioSpanStoreTest {
 
     @Test
     public void doesntTruncateTraceIdByDefault() throws Exception {
-        logger.info("Testing get trace");
+        logger.info(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "Testing get trace");
         params.setStrictTraceId(true);
         storage = LogzioStorage.newBuilder().config(params).build();
         spanStore = new LogzioSpanStore(storage,apiToken);
@@ -63,7 +64,7 @@ public class LogzioSpanStoreTest {
 
     @Test
     public void truncatesTraceIdTo16CharsWhenNtStrict() throws Exception {
-        logger.info("Testing non strict trace ID search");
+        logger.info(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "Testing non strict trace ID search");
         params.setStrictTraceId(false);
         storage = LogzioStorage.newBuilder().config(params).build();
         spanStore = new LogzioSpanStore(storage,apiToken);
@@ -130,7 +131,7 @@ public class LogzioSpanStoreTest {
 
     @Test
     public void newHttpCallHeaderTest() {
-        logger.info("Testing token in search call header");
+        logger.info(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "Testing api token in search call header");
         storage = LogzioStorage.newBuilder().config(params).build();
         spanStore = new LogzioSpanStore(storage,apiToken);
         SearchCallFactory searchCallFactory = new SearchCallFactory(storage.http(),apiToken);

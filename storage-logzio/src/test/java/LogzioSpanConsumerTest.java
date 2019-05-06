@@ -15,7 +15,7 @@ import zipkin2.storage.logzio.LogzioStorage;
 import zipkin2.storage.logzio.LogzioStorageParams;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Collections;
 
 import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 import static org.mockserver.model.HttpRequest.request;
@@ -31,7 +31,7 @@ public class LogzioSpanConsumerTest {
 
    @Before
    public void startMockServer() {
-      logger.debug("starting mock server");
+      logger.debug(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "starting mock server");
       mockServer = startClientAndServer(8070);
 
       mockServerClient = new MockServerClient("localhost", 8070);
@@ -42,25 +42,25 @@ public class LogzioSpanConsumerTest {
 
    @After
    public void stopMockServer() {
-      logger.info("stoping mock server...");
+      logger.info(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "stoping mock server...");
       mockServer.stop();
    }
 
    @Test
    public void testConsumerAccept() {
-      logger.info("Testing consumer accept..");
+      logger.info(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "Testing consumer accept..");
       String traceId = "1234567890abcdef";
       Span sampleSpan = Span.newBuilder().traceId(traceId).id("2").timestamp(1L).localEndpoint(LOCAL_ENDPOINT).kind(Span.Kind.CLIENT).build();
       ConsumerParams consumerParams = new ConsumerParams();
-      consumerParams.setToken("notARealToken");
+      consumerParams.setAccountToken("notARealToken");
       consumerParams.setListenerUrl("http://127.0.0.1:8070");
       LogzioStorageParams storageParams = new LogzioStorageParams();
       storageParams.setConsumerParams(consumerParams);
-
+      storageParams.setApiToken("");
       LogzioStorage logzioStorage = LogzioStorage.newBuilder().config(storageParams).build();
       LogzioSpanConsumer consumer = (LogzioSpanConsumer) logzioStorage.spanConsumer();
       try {
-      consumer.accept(Arrays.asList(sampleSpan)).execute();
+      consumer.accept(Collections.singletonList(sampleSpan)).execute();
       } catch (IOException e) {
          Assert.fail(e.getMessage());
       }
@@ -75,20 +75,21 @@ public class LogzioSpanConsumerTest {
 
    @Test
    public void closeStorageTest() {
-      logger.info("Testing storage close..");
+      logger.info(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "Testing storage close..");
       String traceId = "1234567890abcdef";
       Span sampleSpan = Span.newBuilder().traceId(traceId).id("2").timestamp(1L).localEndpoint(LOCAL_ENDPOINT).kind(Span.Kind.CLIENT).build();
       ConsumerParams consumerParams = new ConsumerParams();
-      consumerParams.setToken("notARealToken");
+      consumerParams.setAccountToken("notARealToken");
       consumerParams.setListenerUrl("http://127.0.0.1:8070");
       LogzioStorageParams storageParams = new LogzioStorageParams();
       storageParams.setConsumerParams(consumerParams);
+      storageParams.setApiToken("");
 
       LogzioStorage logzioStorage = LogzioStorage.newBuilder().config(storageParams).build();
       LogzioSpanConsumer consumer = (LogzioSpanConsumer) logzioStorage.spanConsumer();
       logzioStorage.close();
       try {
-         consumer.accept(Arrays.asList(sampleSpan)).execute();
+         consumer.accept(Collections.singletonList(sampleSpan)).execute();
       } catch (IOException e) {
          Assert.fail(e.getMessage());
       } catch (IllegalStateException ex) {
