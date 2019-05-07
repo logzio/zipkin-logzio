@@ -93,7 +93,7 @@ public class LogzioSpanConsumerTest {
    }
 
    @Test
-   public void interruptSenderTest() {
+   public void interruptSenderCloseTest() {
 
       logger.info(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "Testing storage close..");
       Span sampleSpan = Span.newBuilder().traceId("1234567890abcdef").id("2").timestamp(1L).localEndpoint(LOCAL_ENDPOINT).kind(Span.Kind.CLIENT).build();
@@ -113,6 +113,7 @@ public class LogzioSpanConsumerTest {
       });
 
       Thread closingThread = new Thread(logzioStorage::close);
+
       storageThread.start();
       closingThread.start();
       closingThread.interrupt();
