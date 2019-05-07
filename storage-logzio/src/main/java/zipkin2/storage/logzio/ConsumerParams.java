@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class ConsumerParams {
 
@@ -19,6 +20,7 @@ public class ConsumerParams {
     private String accountToken;
     private final int threadPoolSize = 3;
     private final boolean compressRequests = true;
+    private ScheduledExecutorService senderExecutors;
 
     // Disk queue parameters
     private File queueDir;
@@ -49,6 +51,10 @@ public class ConsumerParams {
         this.accountToken = accountToken;
     }
 
+    public ScheduledExecutorService getSenderExecutors() {
+        return senderExecutors;
+    }
+
     public LogzioSender getLogzioSender() {
         HttpsRequestConfiguration requestConf;
         try {
@@ -63,10 +69,11 @@ public class ConsumerParams {
             logger.error(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "problem in one or more parameters with error {}", e.getMessage());
             return null;
         }
+        senderExecutors = Executors.newScheduledThreadPool(this.threadPoolSize);
         SenderStatusReporter statusReporter = StatusReporterFactory.newSenderStatusReporter(LoggerFactory.getLogger(LogzioSender.class));
         LogzioSender.Builder senderBuilder = LogzioSender
                 .builder()
-                .setTasksExecutor(Executors.newScheduledThreadPool(this.threadPoolSize))
+                .setTasksExecutor(senderExecutors)
                 .setReporter(statusReporter)
                 .setHttpsRequestConfiguration(requestConf)
                 .setDebug(true)

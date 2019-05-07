@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class LogzioSpanConsumer implements SpanConsumer {
@@ -25,6 +27,7 @@ public class LogzioSpanConsumer implements SpanConsumer {
     private static final int INDEX_CHARS_LIMIT = 256;
     private final ByteString EMPTY_JSON = ByteString.of(new byte[]{'{', '}'});
     private volatile LogzioSender logzioSender;
+    private volatile ExecutorService senderExecutors;
     private volatile boolean closeCalled;
     private static final Logger logger = LoggerFactory.getLogger(LogzioStorage.class);
 
@@ -34,6 +37,7 @@ public class LogzioSpanConsumer implements SpanConsumer {
                 if (logzioSender == null) {
                     logzioSender = params.getLogzioSender();
                     logzioSender.start();
+                    senderExecutors = params.getSenderExecutors();
                 }
             }
         }
@@ -62,6 +66,19 @@ public class LogzioSpanConsumer implements SpanConsumer {
             return;
         }
         logzioSender.stop();
+        if (senderExecutors != null) {
+            logger.info(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "Submitting shutdown request");
+            senderExecutors.shutdown();
+            boolean shutdownResult = false;
+            try {
+                shutdownResult = senderExecutors.awaitTermination(20, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                logger.error(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "Shutdown was interrupted");
+            }
+            if (!shutdownResult) {
+                senderExecutors.shutdownNow();
+            }
+        }
         this.closeCalled = true;
     }
 
