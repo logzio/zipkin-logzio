@@ -44,7 +44,7 @@ public class LogzioSpanConsumer implements SpanConsumer {
     }
 
     public Call<Void> accept(List<Span> spans) {
-        if (closeCalled) throw new IllegalStateException("closed");
+        if (closeCalled) throw new IllegalStateException("storage is closed");
         if (spans.isEmpty()) {
             return Call.create(null);
         }
