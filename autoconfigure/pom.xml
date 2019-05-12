@@ -7,15 +7,12 @@
     <parent>
         <groupId>io.logz.zipkin</groupId>
         <artifactId>zipkin-logzio-parent</artifactId>
-        <version>0.0.1</version>
+        <!--suppress MavenPropertyInParent -->
+        <version>${zipkin-logzio-version}</version>
     </parent>
-    
-    <artifactId>zipkin-autoconfigure</artifactId>
-    <version>1.0-SNAPSHOT</version>
 
-    <!--<modules>-->
-        <!--<module>storage-logzio</module>-->
-    <!--</modules>-->
+    <artifactId>zipkin-autoconfigure</artifactId>
+    <version>${zipkin-logzio-version}</version>
     <packaging>pom</packaging>
 
     <properties>

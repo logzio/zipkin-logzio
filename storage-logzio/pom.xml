@@ -6,7 +6,8 @@
     <parent>
         <groupId>io.logz.zipkin</groupId>
         <artifactId>zipkin-logzio-parent</artifactId>
-        <version>0.0.1</version>
+        <!--suppress MavenPropertyInParent -->
+        <version>${zipkin-logzio-version}</version>
     </parent>
 
     <artifactId>zipkin-storage-logzio</artifactId>
@@ -30,6 +31,7 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20180813</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -42,6 +44,7 @@
             <groupId>com.squareup.okio</groupId>
             <artifactId>okio</artifactId>
             <version>2.1.0</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
