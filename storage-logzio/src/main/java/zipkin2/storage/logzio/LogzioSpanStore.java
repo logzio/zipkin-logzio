@@ -39,7 +39,6 @@ public class LogzioSpanStore implements SpanStore {
     public Call<List<List<Span>>> getTraces(QueryRequest request) {
         long endMillis = request.endTs();
         long beginMillis = endMillis - request.lookback();
-
         SearchRequest.Filters filters = new SearchRequest.Filters();
         filters.addRange(LogzioStorage.JSON_TIMESTAMP_FIELD, beginMillis, endMillis);
         if (request.serviceName() != null) {
@@ -69,6 +68,9 @@ public class LogzioSpanStore implements SpanStore {
         // So we fudge and order on the first span among the filtered spans - in practice, there should
         // be no significant difference in user experience since span start times are usually very
         // close to each other in human time.
+        if (request.limit() > 1000) {
+            throw new IllegalArgumentException(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "max search size is 1000");
+        }
         Aggregation traceIdTimestamp =
                 Aggregation.terms(LogzioStorage.JSON_TRACE_ID_FIELD, request.limit())
                         .addSubAggregation(Aggregation.min(LogzioStorage.JSON_TIMESTAMP_FIELD))
@@ -143,10 +145,6 @@ public class LogzioSpanStore implements SpanStore {
         private long beginMillis;
         private long endMillis;
 
-        GetSpansByTraceId(SearchCallFactory search) {
-            this.search = search;
-        }
-
         public GetSpansByTraceId(SearchCallFactory search, long beginMillis, long endMillis) {
             this.search = search;
             this.beginMillis = beginMillis;
@@ -157,7 +155,6 @@ public class LogzioSpanStore implements SpanStore {
                 this.beginMillis -= TimeUnit.DAYS.toMillis(1) - (this.endMillis - this.beginMillis);
             }
         }
-
 
         @Override
         public Call<List<Span>> map(List<String> inputs) {

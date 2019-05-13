@@ -1,4 +1,7 @@
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.mockserver.client.MockServerClient;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.HttpRequest;
@@ -19,7 +22,6 @@ import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
 public class LogzioSpanConsumerTest {
-
    private static final Logger logger = LoggerFactory.getLogger(LogzioSpanConsumerTest.class);
    private static final Endpoint LOCAL_ENDPOINT = Endpoint.newBuilder().serviceName("local").build();
    private static MockServerClient mockServerClient = null;
@@ -40,13 +42,11 @@ public class LogzioSpanConsumerTest {
 
    @BeforeClass
    public static void setup() {
-
       ConsumerParams consumerParams = new ConsumerParams();
       consumerParams.setAccountToken("notARealToken");
       consumerParams.setListenerUrl("http://127.0.0.1:8070");
       storageParams.setConsumerParams(consumerParams);
       storageParams.setApiToken("");
-
    }
 
    @AfterClass
@@ -57,9 +57,18 @@ public class LogzioSpanConsumerTest {
 
    @Test
    public void testConsumerAccept() {
-      logger.info(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "Testing consumer accept..");
-      Span sampleSpan = Span.newBuilder().traceId("1234567890abcdef").id("2").timestamp(1L).localEndpoint(LOCAL_ENDPOINT).kind(Span.Kind.CLIENT).build();
-      LogzioStorage logzioStorage = LogzioStorage.newBuilder().config(storageParams).build();
+      Span sampleSpan = Span
+              .newBuilder()
+              .traceId("1234567890abcdef")
+              .id("2")
+              .timestamp(1L)
+              .localEndpoint(LOCAL_ENDPOINT)
+              .kind(Span.Kind.CLIENT)
+              .build();
+      LogzioStorage logzioStorage = LogzioStorage
+              .newBuilder()
+              .config(storageParams)
+              .build();
       LogzioSpanConsumer consumer = (LogzioSpanConsumer) logzioStorage.spanConsumer();
       try {
       consumer.accept(Collections.singletonList(sampleSpan)).execute();
@@ -77,8 +86,14 @@ public class LogzioSpanConsumerTest {
 
    @Test
    public void closeStorageTest() {
-      logger.info(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "Testing storage close..");
-      Span sampleSpan = Span.newBuilder().traceId("1234567890abcdef").id("2").timestamp(1L).localEndpoint(LOCAL_ENDPOINT).kind(Span.Kind.CLIENT).build();
+      Span sampleSpan = Span
+              .newBuilder()
+              .traceId("1234567890abcdef")
+              .id("2")
+              .timestamp(1L)
+              .localEndpoint(LOCAL_ENDPOINT)
+              .kind(Span.Kind.CLIENT)
+              .build();
       LogzioStorage logzioStorage = LogzioStorage.newBuilder().config(storageParams).build();
       LogzioSpanConsumer consumer = (LogzioSpanConsumer) logzioStorage.spanConsumer();
       logzioStorage.close();
@@ -94,9 +109,13 @@ public class LogzioSpanConsumerTest {
 
    @Test
    public void interruptSenderCloseTest() {
-
-      logger.info(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "Testing storage close..");
-      Span sampleSpan = Span.newBuilder().traceId("1234567890abcdef").id("2").timestamp(1L).localEndpoint(LOCAL_ENDPOINT).kind(Span.Kind.CLIENT).build();
+     Span sampleSpan = Span.newBuilder()
+              .traceId("1234567890abcdef")
+              .id("2")
+              .timestamp(1L)
+              .localEndpoint(LOCAL_ENDPOINT)
+              .kind(Span.Kind.CLIENT)
+              .build();
       LogzioStorage logzioStorage = LogzioStorage.newBuilder().config(storageParams).build();
       LogzioSpanConsumer consumer = (LogzioSpanConsumer) logzioStorage.spanConsumer();
 
@@ -118,5 +137,4 @@ public class LogzioSpanConsumerTest {
       closingThread.start();
       closingThread.interrupt();
    }
-
 }
