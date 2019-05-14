@@ -7,6 +7,8 @@ zipkin:
       logzio-api-token: ${LOGZIO_API_TOKEN:}
       logzio-api-host: ${LOGZIO_API_HOST:api.logz.io}
       logzio-account-token: ${LOGZIO_ACCOUNT_TOKEN:}
+      sender-drain-interval: ${SENDER_DRAIN_INTERVAL:5}
+      clean-sent-traces-interval: ${CLEAN_SENT_TRACES_INTERVAL:30}
 
 
 

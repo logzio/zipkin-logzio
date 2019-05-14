@@ -45,6 +45,8 @@ public class LogzioSpanConsumerTest {
       ConsumerParams consumerParams = new ConsumerParams();
       consumerParams.setAccountToken("notARealToken");
       consumerParams.setListenerUrl("http://127.0.0.1:8070");
+      consumerParams.setCleanSentTracesInterval(30);
+      consumerParams.setSenderDrainInterval(5);
       storageParams.setConsumerParams(consumerParams);
       storageParams.setApiToken("");
    }
@@ -71,7 +73,7 @@ public class LogzioSpanConsumerTest {
               .build();
       LogzioSpanConsumer consumer = (LogzioSpanConsumer) logzioStorage.spanConsumer();
       try {
-      consumer.accept(Collections.singletonList(sampleSpan)).execute();
+         consumer.accept(Collections.singletonList(sampleSpan)).execute();
       } catch (IOException e) {
          Assert.fail(e.getMessage());
       }

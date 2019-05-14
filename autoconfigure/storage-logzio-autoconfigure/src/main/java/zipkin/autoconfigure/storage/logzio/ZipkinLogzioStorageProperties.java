@@ -21,6 +21,8 @@ class ZipkinLogzioStorageProperties implements Serializable { // for Spark jobs
     private String logzioApiToken;
     private String logzioListenerHost;
     private String logzioApiHost;
+    private int senderDrainInterval;
+    private int cleanSentTracesInterval;
 
     public void setLogzioAccountToken(String logzioAccountToken) {
         this.logzioAccountToken = logzioAccountToken;
@@ -50,20 +52,40 @@ class ZipkinLogzioStorageProperties implements Serializable { // for Spark jobs
         return logzioApiHost;
     }
 
+    public int getSenderDrainInterval() {
+        return senderDrainInterval;
+    }
+
+    public void setSenderDrainInterval(int senderDrainInterval) {
+        this.senderDrainInterval = senderDrainInterval;
+    }
+
+    public int getCleanSentTracesInterval() {
+        return cleanSentTracesInterval;
+    }
+
+    public void setCleanSentTracesInterval(int cleanSentTracesInterval) {
+        this.cleanSentTracesInterval = cleanSentTracesInterval;
+    }
+
     public void setLogzioApiHost(String logzioApiHost) {
         this.logzioApiHost = logzioApiHost;
     }
+
     public LogzioStorage.Builder toBuilder() {
         LogzioStorageParams config = new LogzioStorageParams();
         ConsumerParams consumerParams = new ConsumerParams();
         consumerParams.setListenerUrl(HTTPS_PREFIX + logzioListenerHost + LISTENER_HTTPS_PORT);
         consumerParams.setAccountToken(logzioAccountToken);
+        consumerParams.setSenderDrainInterval(senderDrainInterval);
+        consumerParams.setCleanSentTracesInterval(cleanSentTracesInterval);
         config.setConsumerParams(consumerParams);
         config.setApiToken(logzioApiToken);
         config.setSearchApiUrl(HTTPS_PREFIX + logzioApiHost + SEARCH_API_SUFFIX);
         logger.info(LogzioStorage.ZIPKIN_LOGZIO_STORAGE_MSG + "config " + config.toString());
         return LogzioStorage.newBuilder().config(config);
     }
+
 
 }
 

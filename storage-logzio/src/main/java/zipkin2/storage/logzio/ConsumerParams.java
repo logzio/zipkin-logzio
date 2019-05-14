@@ -25,8 +25,9 @@ public class ConsumerParams {
     // Disk queue parameters
     private File queueDir;
     private final int fileSystemFullPercentThreshold = 98;
-    private final int gcPersistedQueueFilesIntervalSeconds = 30;
     private final int diskSpaceCheckInterval = 1000;
+    private int senderDrainInterval;
+    private int cleanSentTracesInterval;
 
     public ConsumerParams() {
         String queuePath = System.getProperty("user.dir");
@@ -77,11 +78,12 @@ public class ConsumerParams {
                 .setReporter(statusReporter)
                 .setHttpsRequestConfiguration(requestConf)
                 .setDebug(true)
+                .setDrainTimeoutSec(this.senderDrainInterval)
                 .withDiskQueue()
-                .setQueueDir(this.queueDir)
-                .setCheckDiskSpaceInterval(this.diskSpaceCheckInterval)
-                .setFsPercentThreshold(this.fileSystemFullPercentThreshold)
-                .setGcPersistedQueueFilesIntervalSeconds(this.gcPersistedQueueFilesIntervalSeconds)
+                    .setQueueDir(this.queueDir)
+                    .setCheckDiskSpaceInterval(this.diskSpaceCheckInterval)
+                    .setFsPercentThreshold(this.fileSystemFullPercentThreshold)
+                    .setGcPersistedQueueFilesIntervalSeconds(this.cleanSentTracesInterval)
                 .endDiskQueue();
         try {
             return senderBuilder.build();
@@ -95,7 +97,17 @@ public class ConsumerParams {
     public String toString() {
         return "SpanConsumerConfig{" +
                 "listener_url='" + url + '\'' +
-                "account_token=" + (accountToken.isEmpty() ? "" : "********" + accountToken.substring(accountToken.length()-4)) +
+                " account_token=" + (accountToken.isEmpty() ? "" : "********" + accountToken.substring(accountToken.length() - 4)) +
+                " cleanSentTracesInterval=" + cleanSentTracesInterval +
+                " senderDrainInterval=" + senderDrainInterval +
                 '}';
+    }
+
+    public void setSenderDrainInterval(int senderDrainInterval) {
+        this.senderDrainInterval = senderDrainInterval;
+    }
+
+    public void setCleanSentTracesInterval(int cleanSentTracesInterval) {
+        this.cleanSentTracesInterval = cleanSentTracesInterval;
     }
 }
