@@ -17,6 +17,7 @@ import zipkin2.storage.logzio.LogzioStorageParams;
 import java.io.IOException;
 import java.util.Collections;
 
+import static java.lang.Thread.sleep;
 import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
@@ -46,7 +47,7 @@ public class LogzioSpanConsumerTest {
       consumerParams.setAccountToken("notARealToken");
       consumerParams.setListenerUrl("http://127.0.0.1:8070");
       consumerParams.setCleanSentTracesInterval(30);
-      consumerParams.setSenderDrainInterval(5);
+      consumerParams.setSenderDrainInterval(3);
       storageParams.setConsumerParams(consumerParams);
       storageParams.setApiToken("");
    }
@@ -59,6 +60,7 @@ public class LogzioSpanConsumerTest {
 
    @Test
    public void testConsumerAccept() {
+      int initialRequestsCount = mockServerClient.retrieveRecordedRequests(request().withMethod("POST")).length;
       Span sampleSpan = Span
               .newBuilder()
               .traceId("1234567890abcdef")
@@ -79,7 +81,7 @@ public class LogzioSpanConsumerTest {
       }
 
       HttpRequest[] recordedRequests = mockServerClient.retrieveRecordedRequests(request().withMethod("POST"));
-      Assert.assertEquals(recordedRequests.length,1);
+      Assert.assertEquals(initialRequestsCount + 1, recordedRequests.length);
       String body = recordedRequests[0].getBodyAsString();
       Assert.assertTrue(body.contains("\"" + "traceId" + "\":\"" + sampleSpan.traceId() + "\""));
       Assert.assertTrue(body.contains("\"" + "kind" + "\":\"" + Span.Kind.CLIENT + "\""));
@@ -138,5 +140,38 @@ public class LogzioSpanConsumerTest {
       storageThread.start();
       closingThread.start();
       closingThread.interrupt();
+   }
+
+   @Test
+   public void interruptMidSendTest() {
+      int initialRequestsCount = mockServerClient.retrieveRecordedRequests(request().withMethod("POST")).length;
+      Span sampleSpan = Span.newBuilder()
+              .traceId("1234567890abcdef")
+              .id("2")
+              .timestamp(1L)
+              .localEndpoint(LOCAL_ENDPOINT)
+              .kind(Span.Kind.CLIENT)
+              .build();
+      LogzioStorage logzioStorage = LogzioStorage.newBuilder().config(storageParams).build();
+      LogzioSpanConsumer consumer = (LogzioSpanConsumer) logzioStorage.spanConsumer();
+
+      Thread storageThread = new Thread(() -> {
+            for (int i = 0 ; i < 100 ; i++) {
+               try {
+                  consumer.accept(Collections.singletonList(sampleSpan)).execute();
+               } catch (IOException e) {
+                  Assert.fail(e.getMessage());
+               }
+            }
+      });
+      storageThread.start();
+      try {
+         sleep(1000);
+         storageThread.interrupt();
+         HttpRequest[] recordedRequests = mockServerClient.retrieveRecordedRequests(request().withMethod("POST"));
+         Assert.assertEquals(initialRequestsCount + 100, recordedRequests.length);
+      } catch (InterruptedException e) {
+         Assert.fail(e.getMessage());
+      }
    }
 }
