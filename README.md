@@ -60,8 +60,8 @@ If you do, then the required fields change a bit from what's shown in the Parame
 | **LOGZIO_LISTENER_HOST** | **Default**: `listener.logz.io` <br> Replace `<LISTENER-URL>` with your region's listener URL. For more information on finding your account's region, see [Account region](https://docs.logz.io/user-guide/accounts/account-region.html). |
 | **LOGZIO_API_HOST** | **Default**: `api.logz.io` <br> Required to read back spans from Logz.io. <br> Replace `<API-URL>` with your region's base API URL. For more information on finding your account's region, see [Account region](https://docs.logz.io/user-guide/accounts/account-region.html). |
 | **STRICT_TRACE_ID** | **Default**: `true` <br> Use `false` if your version of Zipkin server generates 64-bit trace IDs (version 1.14 or lower). If `false`, spans are grouped by the rightmost 16 characters of the trace ID. For version 1.15 or later, we recommend leaving the default. |
-| **SENDER_DRAIN_INTERVAL** |  **Default**: 5 <br> Time interval, in seconds, to send the traces accumulated on the disk |
-| **CLEAN_SENT_TRACES_INTERVAL** | **Default**: 30 <br> Time interval, in seconds, to clean sent traces from the disk |
+| **SENDER_DRAIN_INTERVAL** |  **Default**: `5` <br> Time interval, in seconds, to send the traces accumulated on the disk. |
+| **CLEAN_SENT_TRACES_INTERVAL** | **Default**: `30` <br> Time interval, in seconds, to clean sent traces from the disk. |
 
 ### 3. Check Logz.io for your traces
 
