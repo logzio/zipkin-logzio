@@ -1,3 +1,4 @@
+import org.jetbrains.annotations.NotNull;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -61,14 +62,7 @@ public class LogzioSpanConsumerTest {
    @Test
    public void testConsumerAccept() {
       int initialRequestsCount = mockServerClient.retrieveRecordedRequests(request().withMethod("POST")).length;
-      Span sampleSpan = Span
-              .newBuilder()
-              .traceId("1234567890abcdef")
-              .id("2")
-              .timestamp(1L)
-              .localEndpoint(LOCAL_ENDPOINT)
-              .kind(Span.Kind.CLIENT)
-              .build();
+      Span sampleSpan = getSampleSpan();
       LogzioStorage logzioStorage = LogzioStorage
               .newBuilder()
               .config(storageParams)
@@ -90,14 +84,7 @@ public class LogzioSpanConsumerTest {
 
    @Test
    public void closeStorageTest() {
-      Span sampleSpan = Span
-              .newBuilder()
-              .traceId("1234567890abcdef")
-              .id("2")
-              .timestamp(1L)
-              .localEndpoint(LOCAL_ENDPOINT)
-              .kind(Span.Kind.CLIENT)
-              .build();
+      Span sampleSpan = getSampleSpan();
       LogzioStorage logzioStorage = LogzioStorage.newBuilder().config(storageParams).build();
       LogzioSpanConsumer consumer = (LogzioSpanConsumer) logzioStorage.spanConsumer();
       logzioStorage.close();
@@ -113,13 +100,7 @@ public class LogzioSpanConsumerTest {
 
    @Test
    public void interruptSenderCloseTest() {
-     Span sampleSpan = Span.newBuilder()
-              .traceId("1234567890abcdef")
-              .id("2")
-              .timestamp(1L)
-              .localEndpoint(LOCAL_ENDPOINT)
-              .kind(Span.Kind.CLIENT)
-              .build();
+     Span sampleSpan = getSampleSpan();
       LogzioStorage logzioStorage = LogzioStorage.newBuilder().config(storageParams).build();
       LogzioSpanConsumer consumer = (LogzioSpanConsumer) logzioStorage.spanConsumer();
 
@@ -145,13 +126,7 @@ public class LogzioSpanConsumerTest {
    @Test
    public void interruptMidSendTest() {
       int initialRequestsCount = mockServerClient.retrieveRecordedRequests(request().withMethod("POST")).length;
-      Span sampleSpan = Span.newBuilder()
-              .traceId("1234567890abcdef")
-              .id("2")
-              .timestamp(1L)
-              .localEndpoint(LOCAL_ENDPOINT)
-              .kind(Span.Kind.CLIENT)
-              .build();
+      Span sampleSpan = getSampleSpan();
       LogzioStorage logzioStorage = LogzioStorage.newBuilder().config(storageParams).build();
       LogzioSpanConsumer consumer = (LogzioSpanConsumer) logzioStorage.spanConsumer();
 
@@ -173,5 +148,15 @@ public class LogzioSpanConsumerTest {
       } catch (InterruptedException e) {
          Assert.fail(e.getMessage());
       }
+   }
+
+   private Span getSampleSpan() {
+      return Span.newBuilder()
+              .traceId("1234567890abcdef")
+              .id("2")
+              .timestamp(1L)
+              .localEndpoint(LOCAL_ENDPOINT)
+              .kind(Span.Kind.CLIENT)
+              .build();
    }
 }
