@@ -73,10 +73,10 @@ public final class LogzioStorage extends StorageComponent {
     @Memoized
     public
     HttpCall.Factory http() {
-        OkHttpClient ok = client();
-        ok.dispatcher().setMaxRequests(MAX_HTTP_REQUESTS);
-        ok.dispatcher().setMaxRequestsPerHost(MAX_HTTP_REQUESTS);
-        return new HttpCall.Factory(ok, HttpUrl.parse(logzioApiHost));
+            OkHttpClient ok = client();
+            ok.dispatcher().setMaxRequests(MAX_HTTP_REQUESTS);
+            ok.dispatcher().setMaxRequestsPerHost(MAX_HTTP_REQUESTS);
+            return new HttpCall.Factory(ok, HttpUrl.parse(logzioApiHost));
     }
 
     private OkHttpClient client() {

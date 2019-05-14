@@ -27,8 +27,8 @@ public class LogzioSpanStoreTest {
 
     private static String apiToken = "not-a-real-api-token";
     private static LogzioStorageParams params = new LogzioStorageParams();
-    private static LogzioStorage storage ;
-    private static LogzioSpanStore spanStore ;
+    private static LogzioStorage storage;
+    private static LogzioSpanStore spanStore;
 
     @BeforeClass
     public static void setup() {
@@ -53,7 +53,7 @@ public class LogzioSpanStoreTest {
     public void doesntTruncateTraceIdByDefault() throws Exception {
         params.setStrictTraceId(true);
         storage = LogzioStorage.newBuilder().config(params).build();
-        spanStore = new LogzioSpanStore(storage,apiToken);
+        spanStore = new LogzioSpanStore(storage, apiToken);
         mockWebServer.enqueue(new MockResponse());
         spanStore.getTrace("48fec942f3e78b893041d36dc43227fd").execute();
         RecordedRequest request = mockWebServer.takeRequest();
@@ -65,7 +65,7 @@ public class LogzioSpanStoreTest {
     public void truncatesTraceIdTo16CharsWhenNtStrict() throws Exception {
         params.setStrictTraceId(false);
         storage = LogzioStorage.newBuilder().config(params).build();
-        spanStore = new LogzioSpanStore(storage,apiToken);
+        spanStore = new LogzioSpanStore(storage, apiToken);
         mockWebServer.enqueue(new MockResponse());
         spanStore.getTrace("48fec942f3e78b893041d36dc43227fd").execute();
 
@@ -75,10 +75,10 @@ public class LogzioSpanStoreTest {
     @Test
     public void newHttpCallHeaderTest() {
         storage = LogzioStorage.newBuilder().config(params).build();
-        spanStore = new LogzioSpanStore(storage,apiToken);
-        SearchCallFactory searchCallFactory = new SearchCallFactory(storage.http(),apiToken);
+        spanStore = new LogzioSpanStore(storage, apiToken);
+        SearchCallFactory searchCallFactory = new SearchCallFactory(storage.http(), apiToken);
         HttpCall<List<Span>> call = searchCallFactory.newCall(SearchRequest.create(), BodyConverters.SPANS);
-        Assert.assertEquals(call.call.request().header(SearchCallFactory.API_TOKEN_HEADER),apiToken);
+        Assert.assertEquals(call.call.request().header(SearchCallFactory.API_TOKEN_HEADER), apiToken);
     }
 
 }

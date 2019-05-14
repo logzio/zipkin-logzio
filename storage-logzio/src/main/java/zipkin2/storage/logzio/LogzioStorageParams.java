@@ -53,5 +53,4 @@ public class LogzioStorageParams {
     public String getSearchApiUrl() {
         return searchApiUrl;
     }
-
 }
