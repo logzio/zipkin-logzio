@@ -143,6 +143,7 @@ public class LogzioSpanConsumerTest {
       try {
          sleep(1000);
          storageThread.interrupt();
+         sleep(1000);
          HttpRequest[] recordedRequests = mockServerClient.retrieveRecordedRequests(request().withMethod("POST"));
          Assert.assertEquals(initialRequestsCount + 100, recordedRequests.length);
       } catch (InterruptedException e) {
