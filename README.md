@@ -20,13 +20,16 @@ For most users, these won't be an issue, but they're still good to know:
 
 ### 1. Download Zipkin server and Zipkin-Logz.io Trace Storage
 
-Download [Zipkin server](https://search.maven.org/remote_content?g=io.zipkin.java&a=zipkin-server&v=LATEST&c=exec).
+Download [Zipkin server](https://search.maven.org/remote_content?g=io.zipkin&a=zipkin-server&v=LATEST&c=exec).
 
-```shell
-wget -O zipkin.jar 'https://search.maven.org/remote_content?g=io.zipkin.java&a=zipkin-server&v=LATEST&c=exec'
+```bash
+curl -sSL https://zipkin.io/quickstart.sh | bash -s
 ```
 
-Download the [Zipkin-Logz.io Trace Storage](https://github.com/logzio/zipkin-logzio/releases) jar to the same directory.
+Download the latest [Zipkin-Logz.io Trace Storage](https://github.com/logzio/zipkin-logzio/releases) jar to the same directory.
+```bash
+curl -sSL https://jitpack.io/com/github/logzio/zipkin-logzio/zipkin-autoconfigure-storage-logzio/master-SNAPSHOT/zipkin-autoconfigure-storage-logzio-SNAPSHOT-module.jar > logzio.jar
+```
 
 ### 2. Run Zipkin server with the Logz.io extension
 
@@ -40,7 +43,7 @@ LOGZIO_ACCOUNT_TOKEN=<ACCOUNT-TOKEN> \
 LOGZIO_LISTENER_HOST=<LISTENER-URL> \
 LOGZIO_API_TOKEN=<API-TOKEN> \
 LOGZIO_API_HOST=<API-URL> \
-java -Dloader.path='zipkin-logzio.jar,zipkin-logzio.jar!lib' -Dspring.profiles.active=logzio -cp zipkin.jar org.springframework.boot.loader.PropertiesLauncher
+java -Dloader.path='logzio.jar,logzio.jar!lib' -Dspring.profiles.active=logzio -cp zipkin.jar org.springframework.boot.loader.PropertiesLauncher
 ```
 
 **Pro tip**:

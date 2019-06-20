@@ -11,18 +11,63 @@
         <version>${zipkin-logzio-version}</version>
     </parent>
 
-    <artifactId>zipkin-autoconfigure</artifactId>
-    <version>${zipkin-logzio-version}</version>
+    <artifactId>zipkin-logzio-autoconfigure</artifactId>
     <packaging>pom</packaging>
 
     <properties>
         <main.basedir>${project.basedir}/..</main.basedir>
-        <!-- Server is Java 8+ -->
-        <main.java.version>1.8</main.java.version>
-        <main.signature.artifact>java18</main.signature.artifact>
     </properties>
 
     <modules>
-        <module>storage-logzio-autoconfigure</module>
+        <module>storage-logzio</module>
     </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>${spring-boot.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
+            <version>${spring-boot.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <configuration>
+                    <layoutFactory implementation="zipkin.layout.ZipkinLayoutFactory">
+                        <name>zipkin</name>
+                    </layoutFactory>
+                    <classifier>module</classifier>
+                    <!-- https://github.com/spring-projects/spring-boot/issues/3426 transitive exclude doesn't work -->
+                    <excludeGroupIds>
+                        io.zipkin.zipkin2,org.springframework.boot,org.springframework,org.slf4j,com.fasterxml.jackson.core,com.google.auto.value,com.squareup.moshi,com.squareup.okio,com.squareup.okhttp3
+                    </excludeGroupIds>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.zipkin.layout</groupId>
+                        <artifactId>zipkin-layout-factory</artifactId>
+                        <version>0.0.5</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
 </project>

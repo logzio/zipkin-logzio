@@ -10,7 +10,10 @@
     <packaging>pom</packaging>
 
     <properties>
-        <zipkin-logzio-version>0.0.2</zipkin-logzio-version>
+        <zipkin-logzio-version>0.0.3</zipkin-logzio-version>
+        <zipkin.version>2.14.2</zipkin.version>
+        <!-- make sure this matches zipkin's version -->
+        <spring-boot.version>2.1.5.RELEASE</spring-boot.version>
     </properties>
 
     <modules>
@@ -21,8 +24,8 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -30,7 +33,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
+                <version>3.1.2</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -46,58 +49,28 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.zipkin.zipkin2</groupId>
+            <groupId>io.zipkin.zipkin2</groupId>
             <artifactId>zipkin</artifactId>
-            <version>2.13.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
-            <version>2.1.1.RELEASE</version>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>ch.qos.logback</groupId>
-                    <artifactId>logback-classic</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-test</artifactId>
-            <version>2.1.1.RELEASE</version>
-
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>ch.qos.logback</groupId>
-                    <artifactId>logback-classic</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>${zipkin.version}</version>
         </dependency>
 
+        <!-- note: zipkin tends to use JUL, but at runtime uses log4j2 -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.15</version>
+            <version>1.7.26</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.9</version>
         </dependency>
 
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.9.9</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>27.1-jre</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>

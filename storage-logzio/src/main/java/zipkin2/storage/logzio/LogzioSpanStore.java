@@ -1,6 +1,6 @@
 package zipkin2.storage.logzio;
 
-import ch.qos.logback.classic.Logger;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import zipkin2.Call;
 import zipkin2.DependencyLink;
@@ -25,7 +25,7 @@ public class LogzioSpanStore implements SpanStore {
     private final boolean strictTraceId;
     private final SearchCallFactory search;
     private final Call.Mapper<List<Span>, List<List<Span>>> groupByTraceId;
-    private static final Logger logger = (Logger) LoggerFactory.getLogger(LogzioSpanStore.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(LogzioSpanStore.class.getName());
 
 
     public LogzioSpanStore(LogzioStorage storage, String apiToken) {

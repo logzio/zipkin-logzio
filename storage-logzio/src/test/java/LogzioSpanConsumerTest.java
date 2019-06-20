@@ -122,6 +122,7 @@ public class LogzioSpanConsumerTest {
       closingThread.interrupt();
    }
 
+  /** This test checks that in-flight spans will complete when a sender is interrupted. */
    @Test
    public void interruptMidSendTest() {
       int initialRequestsCount = mockServerClient.retrieveRecordedRequests(request().withMethod("POST")).length;
