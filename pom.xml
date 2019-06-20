@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <zipkin-logzio-version>0.0.2</zipkin-logzio-version>
+        <zipkin-logzio-version>0.0.3</zipkin-logzio-version>
         <zipkin.version>2.14.2</zipkin.version>
         <!-- make sure this matches zipkin's version -->
         <spring-boot.version>2.1.5.RELEASE</spring-boot.version>
