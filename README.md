@@ -26,7 +26,7 @@ Download [Zipkin server](https://search.maven.org/remote_content?g=io.zipkin&a=z
 curl -sSL https://zipkin.io/quickstart.sh | bash -s
 ```
 
-Download the latest [Zipkin-Logz.io Trace Storage](https://github.com/logzio/zipkin-logzio/releases) jar to the same directory.
+Download the latest [Zipkin-Logz.io Trace Storage](https://jitpack.io/#logzio/zipkin-logzio) jar to the same directory.
 ```bash
 curl -sSL https://jitpack.io/com/github/logzio/zipkin-logzio/zipkin-autoconfigure-storage-logzio/master-SNAPSHOT/zipkin-autoconfigure-storage-logzio-master-SNAPSHOT-module.jar > logzio.jar
 ```
