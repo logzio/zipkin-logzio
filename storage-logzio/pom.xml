@@ -20,52 +20,50 @@
         <dependency>
             <groupId>io.logz.sender</groupId>
             <artifactId>logzio-sender</artifactId>
-            <version>1.0.18</version>
+            <version>1.1.0</version>
         </dependency>
+
         <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1</version>
+            <groupId>io.zipkin.zipkin2</groupId>
+            <artifactId>zipkin-storage-elasticsearch</artifactId>
+            <version>${zipkin.version}</version>
         </dependency>
+        <!-- the following versions are taken from zipkin -->
         <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20180813</version>
+            <groupId>com.squareup.okio</groupId>
+            <artifactId>okio</artifactId>
+            <version>1.17.4</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.squareup.moshi</groupId>
+            <artifactId>moshi</artifactId>
+            <version>1.8.0</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
-            <groupId>com.squareup.okio</groupId>
-            <artifactId>okio</artifactId>
-            <version>2.1.0</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.squareup.moshi</groupId>
-            <artifactId>moshi</artifactId>
-            <version>1.8.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.zipkin.zipkin2</groupId>
-            <artifactId>zipkin-storage-elasticsearch</artifactId>
-            <version>2.13.0</version>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.12.2</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mock-server</groupId>
             <artifactId>mockserver-netty</artifactId>
             <version>5.5.1</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>mockwebserver</artifactId>
-            <version>3.12.1</version>
+            <version>3.14.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

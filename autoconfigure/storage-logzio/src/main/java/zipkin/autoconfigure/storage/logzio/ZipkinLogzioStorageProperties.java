@@ -1,6 +1,6 @@
 package zipkin.autoconfigure.storage.logzio;
 
-import ch.qos.logback.classic.Logger;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import zipkin2.storage.logzio.ConsumerParams;
@@ -12,7 +12,7 @@ import java.io.Serializable;
 @ConfigurationProperties("zipkin.storage.logzio")
 class ZipkinLogzioStorageProperties implements Serializable { // for Spark jobs
     private static final long serialVersionUID = 0L;
-    private static final Logger logger = (Logger) LoggerFactory.getLogger(ZipkinLogzioStorageProperties.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(ZipkinLogzioStorageProperties.class.getName());
     private static final String HTTPS_PREFIX = "https://";
     private static final String SEARCH_API_SUFFIX = "/v1/search";
     private static final String LISTENER_HTTPS_PORT = ":8071";
