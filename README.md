@@ -18,6 +18,18 @@ For most users, these won't be an issue, but they're still good to know:
 
 ## To integrate Zipkin server and Logz.io
 
+You can either [run as a docker](#run-as-a-docker) or run as a [java app](#1-download-zipkin-server-and-zipkin-logzio-trace-storage).
+
+### Run as a docker
+
+If you don't have docker, install it first - instructions [here](http://docs.docker.com/engine/installation/)
+
+Run the docker with the the appropriate [environment variables](#parameters) (no need to set STORAGE_TYPE env).
+```bash
+docker run -d -p 9411:9411 -e LOGZIO_ACCOUNT_TOKEN=<ACCOUNT-TOKEN> -e LOGZIO_API_TOKEN=<API-TOKEN> logzio/zipkin 
+```
+
+
 ### 1. Download Zipkin server and Zipkin-Logz.io Trace Storage
 
 Download [Zipkin server](https://search.maven.org/remote_content?g=io.zipkin&a=zipkin-server&v=LATEST&c=exec).
@@ -53,7 +65,7 @@ If you do, then the required fields change a bit from what's shown in the Parame
 * The **shipping instance** uses `STORAGE_TYPE=logzio`, `LOGZIO_ACCOUNT_TOKEN`, and `LOGZIO_LISTENER_HOST`.
 * The **reading instance** uses `STORAGE_TYPE=logzio`, `LOGZIO_API_TOKEN`, and `LOGZIO_API_HOST`.
 
-**Parameters**
+#### Parameters
 
 | Parameter | Description |
 |---|---|
