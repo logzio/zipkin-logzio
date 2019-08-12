@@ -25,9 +25,9 @@ public class SearchCallFactory {
     private static final MediaType APPLICATION_JSON = MediaType.parse("application/json");
     public static final String API_TOKEN_HEADER = "X-API-TOKEN";
 
-    final HttpCall.Factory http;
-    final String apiToken;
-    final JsonAdapter<SearchRequest> searchRequest =
+    private final HttpCall.Factory http;
+    private final String apiToken;
+    private final JsonAdapter<SearchRequest> searchRequest =
             new Moshi.Builder().build().adapter(SearchRequest.class);
 
     public SearchCallFactory(HttpCall.Factory http, String apiToken) {
@@ -45,7 +45,7 @@ public class SearchCallFactory {
         return http.newCall(httpRequest, bodyConverter);
     }
 
-    HttpUrl lenientSearch(@Nullable String type) {
+    private HttpUrl lenientSearch(@Nullable String type) {
         HttpUrl.Builder builder = http.baseUrl.newBuilder();
         if (type != null) builder.addPathSegment(type);
         return builder.build();
