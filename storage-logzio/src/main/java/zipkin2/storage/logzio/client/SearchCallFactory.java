@@ -19,16 +19,15 @@ import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import zipkin2.elasticsearch.internal.client.HttpCall;
 import zipkin2.internal.Nullable;
 
 public class SearchCallFactory {
     private static final MediaType APPLICATION_JSON = MediaType.parse("application/json");
     public static final String API_TOKEN_HEADER = "X-API-TOKEN";
 
-    private final HttpCall.Factory http;
-    private final String apiToken;
-    private final JsonAdapter<SearchRequest> searchRequest =
+    final HttpCall.Factory http;
+    final String apiToken;
+    final JsonAdapter<SearchRequest> searchRequest =
             new Moshi.Builder().build().adapter(SearchRequest.class);
 
     public SearchCallFactory(HttpCall.Factory http, String apiToken) {
@@ -46,10 +45,9 @@ public class SearchCallFactory {
         return http.newCall(httpRequest, bodyConverter);
     }
 
-    private HttpUrl lenientSearch(@Nullable String type) {
+    HttpUrl lenientSearch(@Nullable String type) {
         HttpUrl.Builder builder = http.baseUrl.newBuilder();
         if (type != null) builder.addPathSegment(type);
         return builder.build();
     }
-
 }

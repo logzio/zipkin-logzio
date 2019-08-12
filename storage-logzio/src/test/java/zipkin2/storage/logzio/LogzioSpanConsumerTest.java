@@ -1,3 +1,5 @@
+package zipkin2.storage.logzio;
+
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -9,10 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import zipkin2.Endpoint;
 import zipkin2.Span;
-import zipkin2.storage.logzio.ConsumerParams;
-import zipkin2.storage.logzio.LogzioSpanConsumer;
-import zipkin2.storage.logzio.LogzioStorage;
-import zipkin2.storage.logzio.LogzioStorageParams;
 
 import java.io.IOException;
 import java.util.Collections;

@@ -1,3 +1,5 @@
+package zipkin2.storage.logzio;
+
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -8,11 +10,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import zipkin2.Span;
-import zipkin2.elasticsearch.internal.client.HttpCall;
-import zipkin2.storage.logzio.BodyConverters;
-import zipkin2.storage.logzio.LogzioSpanStore;
-import zipkin2.storage.logzio.LogzioStorage;
-import zipkin2.storage.logzio.LogzioStorageParams;
+import zipkin2.storage.logzio.client.HttpCall;
 import zipkin2.storage.logzio.client.SearchCallFactory;
 import zipkin2.storage.logzio.client.SearchRequest;
 

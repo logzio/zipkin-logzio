@@ -16,22 +16,16 @@ package zipkin2.storage.logzio;
 import com.squareup.moshi.JsonReader;
 import okio.BufferedSource;
 import zipkin2.Span;
-import zipkin2.elasticsearch.internal.client.HttpCall;
-import zipkin2.elasticsearch.internal.client.SearchResultConverter;
+import zipkin2.storage.logzio.client.HttpCall;
+import zipkin2.storage.logzio.client.SearchResultConverter;
 
 import java.io.IOException;
 import java.util.List;
+import zipkin2.storage.logzio.json.JsonAdapters;
 
-import static zipkin2.elasticsearch.internal.JsonReaders.collectValuesNamed;
+import static zipkin2.storage.logzio.json.JsonReaders.collectValuesNamed;
 
 public final class BodyConverters {
-    static final HttpCall.BodyConverter<Object> NULL =
-            new HttpCall.BodyConverter<Object>() {
-                @Override
-                public Object convert(BufferedSource content) {
-                    return null;
-                }
-            };
     static final HttpCall.BodyConverter<List<String>> KEYS =
             new HttpCall.BodyConverter<List<String>>() {
                 @Override

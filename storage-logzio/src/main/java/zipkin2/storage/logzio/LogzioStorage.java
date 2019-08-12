@@ -1,14 +1,13 @@
 package zipkin2.storage.logzio;
 
-import com.google.auto.value.extension.memoized.Memoized;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import zipkin2.elasticsearch.internal.client.HttpCall;
 import zipkin2.storage.SpanConsumer;
 import zipkin2.storage.SpanStore;
 import zipkin2.storage.StorageComponent;
+import zipkin2.storage.logzio.client.HttpCall;
 
 public final class LogzioStorage extends StorageComponent {
 
@@ -69,18 +68,21 @@ public final class LogzioStorage extends StorageComponent {
         return strictTraceId;
     }
 
-    // hosts resolution might imply a network call, and we might make a new okhttp instance
-    @Memoized
-    public
-    HttpCall.Factory http() {
-            OkHttpClient ok = client();
-            ok.dispatcher().setMaxRequests(MAX_HTTP_REQUESTS);
-            ok.dispatcher().setMaxRequestsPerHost(MAX_HTTP_REQUESTS);
-            return new HttpCall.Factory(ok, HttpUrl.parse(logzioApiHost));
-    }
+    volatile HttpCall.Factory http;
 
-    private OkHttpClient client() {
-        return new OkHttpClient();
+    // hosts resolution might imply a network call, and we might make a new okhttp instance
+    HttpCall.Factory http() {
+        if (http == null) {
+            synchronized (this) {
+                if (http == null) {
+                    OkHttpClient ok = new OkHttpClient();
+                    ok.dispatcher().setMaxRequests(MAX_HTTP_REQUESTS);
+                    ok.dispatcher().setMaxRequestsPerHost(MAX_HTTP_REQUESTS);
+                    http = new HttpCall.Factory(ok, HttpUrl.parse(logzioApiHost));
+                }
+            }
+        }
+        return http;
     }
 
     @Override

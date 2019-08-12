@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package zipkin2.storage.logzio;
+package zipkin2.storage.logzio.json;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonReader;
@@ -28,8 +28,8 @@ import java.io.IOException;
  * Read-only json adapters resurrected from before we switched to Java 6 as storage components can
  * be Java 7+
  */
-final class JsonAdapters {
-    static final JsonAdapter<Span> SPAN_ADAPTER =
+public final class JsonAdapters {
+    public static final JsonAdapter<Span> SPAN_ADAPTER =
             new JsonAdapter<Span>() {
                 @Override
                 public Span fromJson(JsonReader reader) throws IOException {
