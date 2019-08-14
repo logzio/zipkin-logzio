@@ -83,3 +83,15 @@ If you do, then the required fields change a bit from what's shown in the Parame
 Give your traces some time to get from your system to ours, and then open [Kibana](https://app.logz.io/#/dashboard/kibana).
 
 If you still don't see your logs, see [log shipping troubleshooting](https://docs.logz.io/user-guide/log-shipping/log-shipping-troubleshooting.html).
+
+
+###Changelog
+- v0.0.4
+  * Provide a docker for the integration
+  * Added some tests
+  * Updates to Zipkin 2.16 by vendoring internal code previously borrowed
+- v0.0.3
+  * Update vulnerable dependencies 
+- v0.0.2
+  * Use better Zipkin libraries
+  * Much lighter jar file
