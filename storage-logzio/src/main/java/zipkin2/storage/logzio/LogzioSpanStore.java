@@ -5,12 +5,12 @@ import org.slf4j.LoggerFactory;
 import zipkin2.Call;
 import zipkin2.DependencyLink;
 import zipkin2.Span;
-import zipkin2.elasticsearch.internal.client.HttpCall;
 import zipkin2.storage.GroupByTraceId;
 import zipkin2.storage.QueryRequest;
 import zipkin2.storage.SpanStore;
 import zipkin2.storage.StrictTraceId;
 import zipkin2.storage.logzio.client.Aggregation;
+import zipkin2.storage.logzio.client.HttpCall;
 import zipkin2.storage.logzio.client.SearchCallFactory;
 import zipkin2.storage.logzio.client.SearchRequest;
 

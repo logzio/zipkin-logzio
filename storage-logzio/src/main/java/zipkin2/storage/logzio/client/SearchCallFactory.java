@@ -19,7 +19,6 @@ import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import zipkin2.elasticsearch.internal.client.HttpCall;
 import zipkin2.internal.Nullable;
 
 public class SearchCallFactory {
@@ -51,5 +50,4 @@ public class SearchCallFactory {
         if (type != null) builder.addPathSegment(type);
         return builder.build();
     }
-
 }
