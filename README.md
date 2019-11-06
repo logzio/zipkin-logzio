@@ -85,7 +85,7 @@ Give your traces some time to get from your system to ours, and then open [Kiban
 If you still don't see your logs, see [log shipping troubleshooting](https://docs.logz.io/user-guide/log-shipping/log-shipping-troubleshooting.html).
 
 
-###Changelog
+### Changelog
 - v0.0.4
   * Provide a docker for the integration
   * Added some tests
