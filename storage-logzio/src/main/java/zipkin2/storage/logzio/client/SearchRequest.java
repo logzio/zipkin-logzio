@@ -54,7 +54,7 @@ public final class SearchRequest {
   }
 
   public SearchRequest filters(Filters filters) {
-     filters.addTerm("type", ConsumerParams.type);
+     filters.addTerm("type", ConsumerParams.TYPE);
     return query(new BoolQuery("must", filters));
   }
 

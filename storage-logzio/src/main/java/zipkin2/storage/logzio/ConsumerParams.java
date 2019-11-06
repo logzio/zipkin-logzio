@@ -3,11 +3,13 @@ package zipkin2.storage.logzio;
 import io.logz.sender.HttpsRequestConfiguration;
 import io.logz.sender.LogzioSender;
 import io.logz.sender.SenderStatusReporter;
+import io.logz.sender.com.google.common.hash.Hashing;
 import io.logz.sender.exceptions.LogzioParameterErrorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -16,7 +18,7 @@ public class ConsumerParams {
     private static final Logger logger = LoggerFactory.getLogger(ConsumerParams.class);
 
     private String url;
-    public static final String type = "zipkinSpan";
+    public static final String TYPE = "zipkinSpan";
     private String accountToken;
     private final int threadPoolSize = 3;
     private final boolean compressRequests = true;
@@ -29,10 +31,13 @@ public class ConsumerParams {
     private int senderDrainInterval;
     private int cleanSentTracesInterval;
 
-    public ConsumerParams() {
+    public void setQueueDir() {
+        String tokenTypeSha = Hashing.sha256()
+                .hashString(TYPE + accountToken, StandardCharsets.UTF_8)
+                .toString();
         String queuePath = System.getProperty("user.dir");
         queuePath += queuePath.endsWith("/") ? "" : "/";
-        queuePath += "logzio-storage";
+        queuePath += "logzio-storage" + tokenTypeSha;
         this.queueDir = new File(queuePath);
     }
 
@@ -50,6 +55,7 @@ public class ConsumerParams {
 
     public void setAccountToken(String accountToken) {
         this.accountToken = accountToken;
+        setQueueDir();
     }
 
     public ScheduledExecutorService getSenderExecutors() {
@@ -62,7 +68,7 @@ public class ConsumerParams {
             requestConf = HttpsRequestConfiguration
                     .builder()
                     .setLogzioListenerUrl(getUrl())
-                    .setLogzioType(this.type)
+                    .setLogzioType(this.TYPE)
                     .setLogzioToken(getAccountToken())
                     .setCompressRequests(this.compressRequests)
                     .build();
