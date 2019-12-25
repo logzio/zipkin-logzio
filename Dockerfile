@@ -8,7 +8,7 @@ RUN apk add curl unzip && \
   unzip logzio.jar -d logzio && \
   rm logzio.jar
 
-FROM openzipkin/zipkin
+FROM openzipkin/zipkin:2.15.0
 MAINTAINER OpenZipkin "https://zipkin.io/"
 
 COPY --from=0 /zipkin-logzio/ /zipkin/
