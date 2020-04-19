@@ -116,7 +116,7 @@ public final class HttpCall<V> extends Call.Base<V> {
       if (response.isSuccessful()) {
         return null;
       } else {
-        throw new IllegalStateException("response failed: " + response);
+        throw new IllegalArgumentException("response failed: " + response);
       }
     }
     try (ResponseBody responseBody = response.body()) {
@@ -127,7 +127,7 @@ public final class HttpCall<V> extends Call.Base<V> {
       if (response.isSuccessful()) {
         return bodyConverter.convert(content);
       } else {
-        throw new IllegalStateException(
+        throw new IllegalArgumentException(
             "response for " + response.request().tag() + " failed: " + content.readUtf8());
       }
     }
