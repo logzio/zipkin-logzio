@@ -4,7 +4,7 @@ WORKDIR /zipkin-logzio
 
 
 RUN apk add curl unzip && \
-  curl -sSL https://jitpack.io/com/github/logzio/zipkin-logzio/zipkin-autoconfigure-storage-logzio/master-SNAPSHOT/zipkin-autoconfigure-storage-logzio-master-SNAPSHOT-module.jar > logzio.jar && \
+  curl -sSL https://jitpack.io/com/github/logzio/zipkin-logzio/zipkin-module-storage-logzio/master-SNAPSHOT/zipkin-module-storage-logzio-master-SNAPSHOT-module.jar > logzio.jar && \
   unzip logzio.jar -d logzio && \
   rm logzio.jar
 

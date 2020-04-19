@@ -1,7 +1,13 @@
 # When enabled, this allows shorter env properties (ex -Dspring.profiles.active=logzio)
+spring:
+  main:
+    # ZipkinLogzioStorageModule overrides the bean named 'storage'
+    allow-bean-definition-overriding: true
 zipkin:
+  internal:
+    module:
+      logzio: zipkin.module.storage.logzio.ZipkinLogzioStorageModule
   storage:
-    strict-trace-id: ${STRICT_TRACE_ID:true}
     logzio:
       logzio-listener-host: ${LOGZIO_LISTENER_HOST:listener.logz.io}
       logzio-api-token: ${LOGZIO_API_TOKEN:}
@@ -9,6 +15,3 @@ zipkin:
       logzio-account-token: ${LOGZIO_ACCOUNT_TOKEN:}
       sender-drain-interval: ${SENDER_DRAIN_INTERVAL:5}
       clean-sent-traces-interval: ${CLEAN_SENT_TRACES_INTERVAL:30}
-
-
-

@@ -14,7 +14,7 @@
 
     <properties>
         <main.basedir>${project.basedir}/..</main.basedir>
-        <okhttp.version>3.14.2</okhttp.version>
+        <okhttp.version>3.14.7</okhttp.version>
     </properties>
 
     <dependencies>
@@ -29,32 +29,34 @@
             <version>${okhttp.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.squareup.okio</groupId>
-            <artifactId>okio</artifactId>
-            <version>1.17.4</version>
-        </dependency>
-        <dependency>
             <groupId>com.squareup.moshi</groupId>
             <artifactId>moshi</artifactId>
-            <version>1.8.0</version>
+            <version>1.9.2</version>
+            <exclusions>
+                <!-- let okhttp control the okio version -->
+                <exclusion>
+                    <groupId>com.squareup.okio</groupId>
+                    <artifactId>okio</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.13.2</version>
+            <version>3.15.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mock-server</groupId>
             <artifactId>mockserver-netty</artifactId>
-            <version>5.5.1</version>
+            <version>5.10</version>
             <scope>test</scope>
         </dependency>
         <dependency>

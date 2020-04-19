@@ -22,8 +22,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import zipkin2.Call;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class HttpCallTest {
   @Rule
@@ -38,19 +37,15 @@ public class HttpCallTest {
   }
 
   @Test
-  public void executionException_conversionException() throws Exception {
+  public void executionException_conversionException() {
     mws.enqueue(new MockResponse());
 
     Call<?> call = http.newCall(request, b -> {
       throw new IllegalArgumentException("eeek");
     });
 
-    try {
-      call.execute();
-      failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
-    } catch (IllegalArgumentException expected) {
-      assertThat(expected).isInstanceOf(IllegalArgumentException.class);
-    }
+    assertThatThrownBy(call::execute)
+        .isInstanceOf(IllegalArgumentException.class);
   }
 
   @Test
@@ -60,12 +55,8 @@ public class HttpCallTest {
     Call<?> call = http.newCall(request, b -> null);
     call.execute();
 
-    try {
-      call.execute();
-      failBecauseExceptionWasNotThrown(IllegalStateException.class);
-    } catch (IllegalStateException expected) {
-      assertThat(expected).isInstanceOf(IllegalStateException.class);
-    }
+    assertThatThrownBy(call::execute)
+        .isInstanceOf(IllegalStateException.class);
 
     mws.enqueue(new MockResponse());
 
@@ -73,16 +64,12 @@ public class HttpCallTest {
   }
 
   @Test
-  public void executionException_httpFailure() throws Exception {
+  public void executionException_httpFailure() {
     mws.enqueue(new MockResponse().setResponseCode(500));
 
     Call<?> call = http.newCall(request, b -> null);
 
-    try {
-      call.execute();
-      failBecauseExceptionWasNotThrown(IllegalStateException.class);
-    } catch (IllegalStateException expected) {
-      assertThat(expected).isInstanceOf(IllegalStateException.class);
-    }
+    assertThatThrownBy(call::execute)
+        .isInstanceOf(IllegalArgumentException.class);
   }
 }

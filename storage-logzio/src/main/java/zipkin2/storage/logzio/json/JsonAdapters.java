@@ -125,7 +125,7 @@ public final class JsonAdapters {
                     }
                     reader.endObject();
                     if (timestamp == null || value == null) {
-                        throw new IllegalStateException("Incomplete annotation at " + reader.getPath());
+                        throw new IllegalArgumentException("Incomplete annotation at " + reader.getPath());
                     }
                     return Annotation.create(timestamp, value);
                 }

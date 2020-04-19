@@ -38,14 +38,14 @@ public final class JsonReaders {
    * }
    * JsonAdapter<Response> adapter = moshi.adapter(Response.class);
    * Message message = adapter.fromJson(body.source());
-   * if (message != null && message.status != null) throw new IllegalStateException(message.status);
+   * if (message != null && message.status != null) throw new IllegalArgumentException(message.status);
    * }</pre>
    *
    * <p>You can advance to the field directly.
    *
    * <pre>{@code
    * JsonReader status = enterPath(JsonReader.of(body.source()), "message", "status");
-   * if (status != null) throw new IllegalStateException(status.nextString());
+   * if (status != null) throw new IllegalArgumentException(status.nextString());
    * }</pre>
    */
   @Nullable

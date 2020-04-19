@@ -12,12 +12,12 @@
     <properties>
         <zipkin-logzio-version>0.0.5</zipkin-logzio-version>
         <!-- make sure this matches zipkin's version -->
-        <zipkin.version>2.16.0</zipkin.version>
-        <spring-boot.version>2.1.7.RELEASE</spring-boot.version>
+        <zipkin.version>2.21.1</zipkin.version>
+        <spring-boot.version>2.2.6.RELEASE</spring-boot.version>
     </properties>
 
     <modules>
-        <module>autoconfigure</module>
+        <module>module</module>
         <module>storage-logzio</module>
     </modules>
 
@@ -33,7 +33,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.2</version>
+                <version>3.2.0</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -54,16 +54,16 @@
             <version>${zipkin.version}</version>
         </dependency>
 
-        <!-- note: zipkin tends to use JUL, but at runtime uses log4j2 -->
+        <!-- NOTE: io.zipkin.zipkin2:zipkin uses JUL, but io.zipkin:zipkin-server uses SLF4J -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.26</version>
+            <version>1.7.30</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.9.10.1</version>
+            <version>2.10.3</version>
         </dependency>
 
         <dependency>

@@ -40,7 +40,7 @@ curl -sSL https://zipkin.io/quickstart.sh | bash -s
 
 Download the latest [Zipkin-Logz.io Trace Storage](https://jitpack.io/#logzio/zipkin-logzio) jar to the same directory.
 ```bash
-curl -sSL https://jitpack.io/com/github/logzio/zipkin-logzio/zipkin-autoconfigure-storage-logzio/master-SNAPSHOT/zipkin-autoconfigure-storage-logzio-master-SNAPSHOT-module.jar > logzio.jar
+curl -sSL https://jitpack.io/com/github/logzio/zipkin-logzio/zipkin-module-storage-logzio/master-SNAPSHOT/zipkin-module-storage-logzio-master-SNAPSHOT-module.jar > logzio.jar
 ```
 
 ### 2. Run Zipkin server with the Logz.io extension
