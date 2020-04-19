@@ -1,4 +1,4 @@
-package zipkin.autoconfigure.storage.logzio;
+package zipkin.module.storage.logzio;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

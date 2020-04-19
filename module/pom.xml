@@ -11,7 +11,7 @@
         <version>${zipkin-logzio-version}</version>
     </parent>
 
-    <artifactId>zipkin-logzio-autoconfigure</artifactId>
+    <artifactId>zipkin-logzio-module</artifactId>
     <packaging>pom</packaging>
 
     <properties>
@@ -50,7 +50,7 @@
                     <classifier>module</classifier>
                     <!-- https://github.com/spring-projects/spring-boot/issues/3426 transitive exclude doesn't work -->
                     <excludeGroupIds>
-                        io.zipkin.zipkin2,org.springframework.boot,org.springframework,org.slf4j,com.fasterxml.jackson.core
+                        io.zipkin.zipkin2,org.springframework.boot,org.springframework,com.fasterxml.jackson.core,com.google.auto.value,com.google.code.gson,com.google.code.findbugs,javax.annotation,org.slf4j
                     </excludeGroupIds>
                 </configuration>
                 <executions>

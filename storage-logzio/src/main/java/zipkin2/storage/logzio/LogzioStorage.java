@@ -98,6 +98,11 @@ public final class LogzioStorage extends StorageComponent {
 
     }
 
+    @Override
+    public final String toString() {
+        return "LogzioStorage{logzioApiHost=" + logzioApiHost + "}";
+    }
+
     public static final class Builder extends StorageComponent.Builder {
         private LogzioStorageParams storageParams;
 

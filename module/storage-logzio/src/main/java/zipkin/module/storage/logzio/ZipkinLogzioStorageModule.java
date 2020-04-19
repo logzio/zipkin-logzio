@@ -1,4 +1,4 @@
-package zipkin.autoconfigure.storage.logzio;
+package zipkin.module.storage.logzio;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -12,7 +12,7 @@ import zipkin2.storage.StorageComponent;
 @EnableConfigurationProperties(ZipkinLogzioStorageProperties.class)
 @ConditionalOnProperty(name = "zipkin.storage.type", havingValue = "logzio")
 @ConditionalOnMissingBean(StorageComponent.class)
-class ZipkinLogzioStorageAutoConfiguration {
+class ZipkinLogzioStorageModule {
 
     @Bean
     @ConditionalOnMissingBean
