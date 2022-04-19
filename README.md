@@ -86,6 +86,11 @@ If you still don't see your logs, see [log shipping troubleshooting](https://doc
 
 
 ### Changelog
+
+- v0.0.6
+  * Updated dependencies
+- v0.0.5
+  * Updated dependencies and multiple instances support
 - v0.0.4
   * Provide a docker for the integration
   * Added some tests
