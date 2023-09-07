@@ -1,3 +1,7 @@
+# Deprecation note:
+
+This project is archived and no longer maintained. Please refer to [Logz.io's official documentation](https://docs.logz.io/) to learn more about the supported shipping methods.
+
 # Ship Zipkin traces
 
 Zipkin-Logz.io Trace Storage is a storage option for Zipkin distributed traces on your Logz.io account.
